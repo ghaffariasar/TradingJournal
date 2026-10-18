@@ -6,7 +6,7 @@
 
 ---
 
-**[English Version / نسخه انگلیسی](README.md)** | **[Technical Wiki / مستندات فنی](docs/README.fa.md)** | **[User Guide / راهنمای کاربر](docs/USER_GUIDE.fa.md)**
+**[English Version / نسخه انگلیسی](README.md)** | **[Technical Wiki / مستندات فنی](docs/README.fa.md)** 
 
 ---
 
