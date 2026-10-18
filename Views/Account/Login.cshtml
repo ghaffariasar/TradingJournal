@@ -1,0 +1,46 @@
+@using TradingProject.Resources
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.LoginTitle;
+}
+
+<div class="tj-card" style="width:min(420px,100%)">
+    <div class="tj-card-body p-4">
+        <p class="tj-kicker text-center">@Resources.TradingArchiveSystem</p>
+        <br/>
+        <h1 class="h4 text-center mb-1">@Resources.WelcomeBack</h1>
+       
+        <p class="text-center text-muted mb-4">@Resources.LoginSubtitle</p>
+       
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@Resources.LoginError</div>
+        }
+
+        @if (ViewBag.Registered == true)
+        {
+            <div class="alert alert-success">@Resources.RegistrationSuccess</div>
+        }
+
+        <form method="post" asp-action="Login" asp-antiforgery="true">
+            @Html.AntiForgeryToken()
+            <div class="mb-3">
+                <label class="form-label">@Resources.Username</label>
+                <input type="text" name="username" class="form-control" required autofocus autocomplete="username" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">@Resources.Password</label>
+                <input type="password" name="password" class="form-control" required autocomplete="current-password" />
+            </div>
+            <button type="submit" class="btn tj-btn-primary w-100">@Resources.LoginButton</button>
+        </form>
+
+        @if (ViewBag.RegistrationEnabled == true)
+        {
+            <div class="mt-4 text-center">
+                <span class="text-muted small">@Resources.NoAccountYet</span>
+                <a href="@Url.Action("Register")" class="small text-decoration-none">@Resources.RegisterNow</a>
+            </div>
+        }
+    </div>
+</div>

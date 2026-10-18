@@ -1,0 +1,58 @@
+@using TradingProject.Resources
+@model IEnumerable<TradingProject.Models.TradingSession>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.TradingSessions;
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.LookupData</p>
+        <h1>@Resources.TradingSessions</h1>
+    </div>
+    <a href="@Url.Action("Create")" class="btn tj-btn-primary">@Resources.AddTradingSession</a>
+</div>
+
+<partial name="_Alerts" />
+
+<div class="tj-card">
+    <div class="tj-card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>@Resources.Name</th>
+                        <th>@Resources.NameFa</th>
+                        <th>@Resources.StartTimeOfDay</th>
+                        <th>@Resources.EndTimeOfDay</th>
+                        <th>@Resources.IsActive</th>
+                        <th>@Resources.Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="6" class="tj-empty">@Resources.EmptyList</td></tr>
+                    }
+                    @foreach (var s in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@s.Name</td>
+                            <td>@s.NameFa</td>
+                            <td>@(s.StartTimeOfDay?.ToString(@"hh\:mm") ?? "—")</td>
+                            <td>@(s.EndTimeOfDay?.ToString(@"hh\:mm") ?? "—")</td>
+                            <td><span class="tj-pill @(s.IsActive ? "is-on" : "is-off")">@(s.IsActive ? "✓" : "✗")</span></td>
+                            <td class="tj-row-actions">
+                                <a href="@Url.Action("Edit", new { id = s.Id })" class="btn btn-sm btn-outline-primary">@Resources.Edit</a>
+                                <form asp-action="Delete" asp-route-id="@s.Id" method="post" class="d-inline" onsubmit="return confirm('@Resources.ConfirmDelete')">
+                                    @Html.AntiForgeryToken()
+                                    <button class="btn btn-sm btn-outline-danger">@Resources.Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

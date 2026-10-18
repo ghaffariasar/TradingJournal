@@ -1,0 +1,39 @@
+@using TradingProject.Resources
+@model TradingProject.Models.Broker
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Model?.Id > 0 ? Resources.EditBroker : Resources.AddNewBroker;
+    var isEdit = Model?.Id > 0;
+}
+
+<h4 class="mb-3">@(isEdit ? Resources.EditBroker : Resources.AddNewBroker)</h4>
+
+<div class="tj-card">
+    <div class="tj-card-body">
+        <form asp-action="@(isEdit ? "Edit" : "Create")" method="post" asp-antiforgery="true">
+            @Html.AntiForgeryToken()
+            @if (isEdit) { <input type="hidden" asp-for="Id" /> }
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">@Resources.Name</label>
+                    <input asp-for="Name" class="form-control" required />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">@Resources.Website</label>
+                    <input asp-for="Website" class="form-control" />
+                </div>
+                <div class="col-md-12">
+                    <div class="form-check">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                        <label asp-for="IsActive" class="form-check-label">@Resources.IsActive</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <button type="submit" class="btn tj-btn-primary">@(isEdit ? Resources.Update : Resources.Save)</button>
+                <a href="@Url.Action("Index")" class="btn btn-outline-secondary">@Resources.Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

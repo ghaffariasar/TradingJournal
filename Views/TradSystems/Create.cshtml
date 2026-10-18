@@ -1,0 +1,33 @@
+@using TradingProject.Resources
+@model TradingProject.Models.TradSystem
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.AddTradSystemTitle;
+    var isEdit = Model?.Id > 0;
+}
+
+<h4 class="mb-3">@(isEdit ? Resources.EditTradSystemTitle : Resources.AddTradSystemTitle)</h4>
+
+<div class="tj-card">
+    <div class="tj-card-body">
+        <form asp-action="@(isEdit ? "Edit" : "Create")" method="post" asp-antiforgery="true">
+            @Html.AntiForgeryToken()
+            @if (isEdit) { <input type="hidden" asp-for="Id" /> }
+            <div class="mb-3">
+                <label class="form-label">@Resources.SystemName</label>
+                <input asp-for="SystemName" class="form-control" required />
+                <span asp-validation-for="SystemName" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">@Resources.Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="form-check mb-3">
+                <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                <label asp-for="IsActive" class="form-check-label">@Resources.IsActive</label>
+            </div>
+            <button type="submit" class="btn tj-btn-primary">@Resources.Save</button>
+            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">@Resources.Cancel</a>
+        </form>
+    </div>
+</div>

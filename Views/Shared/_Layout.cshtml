@@ -1,0 +1,294 @@
+@using TradingProject.Resources
+@using System.Security.Claims
+@using TradingProject.Security
+@inject IHttpContextAccessor HttpContextAccessor
+@inject TradingProject.Services.IPermissionService PermissionService
+@{
+    var lang = Thread.CurrentThread.CurrentUICulture.Name;
+    var langIsFa = lang == "fa-IR";
+    var dir = langIsFa ? "rtl" : "ltr";
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var userName = User.FindFirstValue("DisplayName") ?? User.Identity?.Name ?? "";
+    var isAdmin = User.IsInRole("Admin");
+    var returnUrl = (HttpContextAccessor.HttpContext!.Request.Path + HttpContextAccessor.HttpContext.Request.QueryString).ToString();
+
+    bool HasPerm(string code) => PermissionService.CurrentHas(code);
+}
+<!DOCTYPE html>
+<html lang="@lang" dir="@dir" data-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @Resources.TradingArchiveSystem</title>
+    <link rel="icon" type="image/x-icon" href="~/images/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="@Url.Content("~/fonts/css2.css")" rel="stylesheet" />
+    @if (langIsFa)
+    {
+        <link href="@Url.Content("~/bootstrap/css/bootstrap.rtl.min.css")" rel="stylesheet" />
+    }
+    else
+    {
+        <link href="@Url.Content("~/bootstrap/css/bootstrap.min.css")" rel="stylesheet" />
+    }
+    <link href="@Url.Content("~/select2/select2.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/dataTable/jquery.dataTables.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/styles/site.css")" rel="stylesheet" />
+                                                     @if (langIsFa)
+    {
+        <link href="@Url.Content("~/datepicker/persian-datepicker.min.css")" rel="stylesheet" />
+    }
+    <script>
+        (function () {
+            var t = localStorage.getItem('tj-theme');
+            if (t) document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+    <script src="@Url.Content("~/jquery/jquery.min.js")"></script>
+    <script src="@Url.Content("~/bootstrap/js/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/select2/select2.min.js")"></script>
+    <script src="@Url.Content("~/dataTable/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/chartJs/chart.js")"></script>
+    @if (langIsFa)
+    {
+        <script src="@Url.Content("~/datepicker/persian-date.min.js")"></script>
+        <script src="@Url.Content("~/datepicker/persian-datepicker.min.js")"></script>
+    }
+</head>
+<body>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <!-- Mobile Sidebar (Offcanvas) -->
+        <div class="offcanvas offcanvas-start tj-sidebar-offcanvas d-lg-none" tabindex="-1" id="tjSidebarOffcanvas" aria-labelledby="tjSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title" id="tjSidebarOffcanvasLabel">@Resources.TradingArchiveSystem</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body p-0">
+                <nav class="nav flex-column tj-sidebar-nav">
+                    @if (HasPerm(PermissionCodes.DashboardView))
+                    {
+                        <div class="tj-nav-label">@Resources.DashboardTitle</div>
+                        <a class="nav-link @(currentController == "Dashboard" ? "active" : "")" href="@Url.Action("Index", "Dashboard")">@Resources.DashboardTitle</a>
+                    }
+                    
+                    @if (HasPerm(PermissionCodes.TradesViewOwn))
+                    {
+                        <a class="nav-link @(currentController == "Trades" ? "active" : "")" href="@Url.Action("Index", "Trades")">@Resources.TradesIndexTitle</a>
+                    }
+
+                    @if (HasPerm(PermissionCodes.AccountsManage))
+                    {
+                        <a class="nav-link @(currentController == "Accounts" ? "active" : "")" href="@Url.Action("Index", "Accounts")">@Resources.TradingAccounts</a>
+                    }
+
+                    @if (HasPerm(PermissionCodes.LookupsManage))
+                    {
+                        <div class="tj-nav-label">@Resources.LookupData</div>
+                        <a class="nav-link @(currentController == "TradingSessions" ? "active" : "")" href="@Url.Action("Index", "TradingSessions")">@Resources.TradingSessions</a>
+                        <a class="nav-link @(currentController == "TradeAnalysisOutcomes" ? "active" : "")" href="@Url.Action("Index", "TradeAnalysisOutcomes")">@Resources.TradeAnalysisOutcomes</a>
+                        <a class="nav-link @(currentController == "TradeEmotions" ? "active" : "")" href="@Url.Action("Index", "TradeEmotions")">@Resources.Emotions</a>
+                        <a class="nav-link @(currentController == "TradSystems" ? "active" : "")" href="@Url.Action("Index", "TradSystems")">@Resources.TradSystems</a>
+                        <a class="nav-link @(currentController == "Patterns" ? "active" : "")" href="@Url.Action("Index", "Patterns")">@Resources.Patterns</a>
+                        <a class="nav-link @(currentController == "Symbols" ? "active" : "")" href="@Url.Action("Index", "Symbols")">@Resources.Symbols</a>
+                        <a class="nav-link @(currentController == "Brokers" ? "active" : "")" href="@Url.Action("Index", "Brokers")">@Resources.Brokers</a>
+                    }
+
+                    @if (HasPerm(PermissionCodes.UsersView))
+                    {
+                        <div class="tj-nav-label">@Resources.Users</div>
+                        <a class="nav-link @(currentController == "Users" ? "active" : "")" href="@Url.Action("Index", "Users")">@Resources.Users</a>
+                    }
+                </nav>
+            </div>
+        </div>
+
+        <!-- Desktop Sidebar -->
+        <aside class="tj-sidebar d-none d-lg-block" id="tjSidebar">
+            <div class="brand">@Resources.TradingArchiveSystem</div>
+            <nav class="nav flex-column">
+                @if (HasPerm(PermissionCodes.DashboardView))
+                {
+                    <div class="tj-nav-label">@Resources.DashboardTitle</div>
+                    <a class="nav-link @(currentController == "Dashboard" ? "active" : "")" href="@Url.Action("Index", "Dashboard")">@Resources.DashboardTitle</a>
+                }
+                
+                @if (HasPerm(PermissionCodes.TradesViewOwn))
+                {
+                    <a class="nav-link @(currentController == "Trades" ? "active" : "")" href="@Url.Action("Index", "Trades")">@Resources.TradesIndexTitle</a>
+                }
+
+                @if (HasPerm(PermissionCodes.AccountsManage))
+                {
+                    <a class="nav-link @(currentController == "Accounts" ? "active" : "")" href="@Url.Action("Index", "Accounts")">@Resources.TradingAccounts</a>
+                }
+
+                @if (HasPerm(PermissionCodes.LookupsManage))
+                {
+                    <div class="tj-nav-label">@Resources.LookupData</div>
+                    <a class="nav-link @(currentController == "TradingSessions" ? "active" : "")" href="@Url.Action("Index", "TradingSessions")">@Resources.TradingSessions</a>
+                    <a class="nav-link @(currentController == "TradeAnalysisOutcomes" ? "active" : "")" href="@Url.Action("Index", "TradeAnalysisOutcomes")">@Resources.TradeAnalysisOutcomes</a>
+                    <a class="nav-link @(currentController == "TradeEmotions" ? "active" : "")" href="@Url.Action("Index", "TradeEmotions")">@Resources.Emotions</a>
+                    <a class="nav-link @(currentController == "TradSystems" ? "active" : "")" href="@Url.Action("Index", "TradSystems")">@Resources.TradSystems</a>
+                    <a class="nav-link @(currentController == "Patterns" ? "active" : "")" href="@Url.Action("Index", "Patterns")">@Resources.Patterns</a>
+                    <a class="nav-link @(currentController == "Symbols" ? "active" : "")" href="@Url.Action("Index", "Symbols")">@Resources.Symbols</a>
+                    <a class="nav-link @(currentController == "Brokers" ? "active" : "")" href="@Url.Action("Index", "Brokers")">@Resources.Brokers</a>
+                }
+
+                @if (HasPerm(PermissionCodes.UsersView))
+                {
+                    <div class="tj-nav-label">@Resources.Users</div>
+                    <a class="nav-link @(currentController == "Users" ? "active" : "")" href="@Url.Action("Index", "Users")">@Resources.Users</a>
+                }
+            </nav>
+        </aside>
+
+        <div class="tj-main">
+            <div class="tj-topbar">
+                <div class="d-flex align-items-center gap-2 min-w-0">
+                    <button class="btn btn-sm btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tjSidebarOffcanvas" aria-controls="tjSidebarOffcanvas" aria-label="Menu">☰</button>
+                    <strong class="text-truncate">@ViewData["Title"]</strong>
+                </div>
+                <div class="d-flex align-items-center gap-2 gap-md-3">
+                    <a class="nav-link p-0" href="@Url.Action("SetLanguage", "Account", new { culture = langIsFa ? "en-US" : "fa-IR", returnUrl })">
+                        @(langIsFa ? "EN" : "فا")
+                    </a>
+                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="toggleTheme()" aria-label="@Resources.ThemeToggle">🌓</button>
+                    <span class="text-muted small d-none d-sm-inline text-truncate" style="max-width: 100px;">@userName</span>
+                    <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <span class="d-none d-md-inline">@Resources.Logout</span>
+                            <span class="d-md-none">✕</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="tj-content">
+                @RenderBody()
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="tj-auth">
+            @RenderBody()
+        </div>
+    }
+
+    <script>
+        function toggleTheme() {
+            var el = document.documentElement;
+            var cur = el.getAttribute('data-theme') || 'light';
+            var next = cur === 'light' ? 'dark' : 'light';
+            el.setAttribute('data-theme', next);
+            localStorage.setItem('tj-theme', next);
+            if (window.Chart && Chart.instances) {
+                Object.values(Chart.instances).forEach(function (c) { c.update(); });
+            }
+        }
+
+        window.TJ_LANG_IS_FA = @(langIsFa ? "true" : "false");
+
+        function initDateInputs() {
+            if (!window.TJ_LANG_IS_FA) return;
+            $('.tj-date-input').each(function () {
+                var $input = $(this);
+                var $hidden = $input.closest('.tj-date-wrap').find('.tj-date-value');
+                if (!$hidden.length) $hidden = $input.siblings('.tj-date-value');
+                var hasTime = ($input.attr('data-time') === 'true') || ($input.data('time') === true);
+               
+                var opts = {
+                    format: hasTime ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD',
+                    autoClose: true,
+                    initialValue: false,
+                    observer: true,
+                    calendarType: 'persian',
+                    persianDigit: false,
+                    calendar: { persian: { locale: 'fa' } },
+                    toolbox:{
+                        calendarSwitch :{
+                            enabled : false
+                        }
+                    },
+                    onSelect: function (unix) {
+                        var d = new persianDate(unix);
+                        var iso = d
+                        .toCalendar('gregorian')
+                        .toLocale('en')
+                        .format('YYYY-MM-DD' + (hasTime ? ' HH:mm' : ''));
+
+                        iso = iso.replace(' ', 'T');
+                        $hidden.val(iso).trigger('change');
+                    }
+                };
+               
+                if($input.val()){
+                    opts.initialValueType = 'persian';
+                }
+                if (hasTime) {
+                    opts.timePicker = { enabled: true, meridiem: { enabled: true } };
+                }
+
+                var picker = $input.persianDatepicker(opts);
+                
+                var value = $.trim($input.val());
+                if (value) 
+                {
+                    var parts = value.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})(?:\s+(\d{1,2}):(\d{2}))?$/);
+                    if (parts) 
+                    {
+                        var dateParts = [
+                            Number(parts[1]),
+                            Number(parts[2]),
+                            Number(parts[3]),
+                            Number(parts[4] || 0),
+                            Number(parts[5] || 0),
+                            0,
+                            0
+                        ];
+
+                        var unix = new persianDate(dateParts).valueOf();
+                        picker.setDate(unix);
+                    }
+                }
+
+                $input.on('blur change', function () {
+                    var v = ($input.val() || '').trim();
+                    if (!v) {
+                        $hidden.val('').trigger('change');
+                        return;
+                    }
+                    try {
+                        var pd = new persianDate().parse(v);
+                        if (pd) {
+                            var iso2 = new persianDate(pd).toCalendar('gregorian').toLocale('en').format('YYYY-MM-DD' + (hasTime ? ' HH:mm' : ''));
+                            $hidden.val(iso2.replace(' ', 'T')).trigger('change');
+                        }
+                    } catch (e) { }
+                });
+            });
+        }
+
+        function applyRequiredMarks() {
+            $('[required]').each(function () {
+                var $field = $(this);
+                var $label = $field.closest('.mb-3,.col-md-3,.col-md-4,.col-md-6,.col-md-12,.col-12,.form-group').find('label.form-label').first();
+                if ($label.length && $label.find('.tj-req').length === 0) {
+                    $label.append(' <span class="text-danger tj-req" aria-hidden="true">*</span>');
+                }
+            });
+        }
+
+        $(function () {
+            initDateInputs();
+            applyRequiredMarks();
+            if ($.fn.select2) {
+                $('.select2').select2({ width: '100%', dir: document.documentElement.dir });
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

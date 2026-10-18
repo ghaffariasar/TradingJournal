@@ -1,0 +1,42 @@
+@using TradingProject.Resources
+@model IEnumerable<TradingProject.Models.Broker>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.Brokers;
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.LookupData</p>
+        <h1>@Resources.Brokers</h1>
+    </div>
+    <a href="@Url.Action("Create")" class="btn tj-btn-primary">@Resources.AddNewBroker</a>
+</div>
+<partial name="_Alerts" />
+
+<div class="tj-card">
+    <div class="tj-card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>@Resources.ID</th><th>@Resources.Name</th><th>@Resources.Website</th><th>@Resources.IsActive</th><th>@Resources.Actions</th></tr></thead>
+                <tbody>
+                    @foreach (var b in Model)
+                    {
+                        <tr>
+                            <td>@b.Id</td><td>@b.Name</td><td>@b.Website</td>
+                            <td>
+                                <span class="tj-pill @(b.IsActive ? "is-on" : "is-off")">@(b.IsActive ? "✓" : "✗")</span>
+                            </td>
+                            <td class="tj-row-actions">
+                                <a href="@Url.Action("Edit", new { id = b.Id })" class="btn btn-sm btn-outline-primary">@Resources.Edit</a>
+                                <form asp-action="Delete" asp-route-id="@b.Id" method="post" class="d-inline" onsubmit="return confirm('@Resources.ConfirmDelete')">
+                                    <button class="btn btn-sm btn-outline-danger">@Resources.Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

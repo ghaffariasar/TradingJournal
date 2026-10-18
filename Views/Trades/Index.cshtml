@@ -1,0 +1,253 @@
+@using TradingProject.Resources
+@using TradingProject.Security
+@using TradingProject.Services
+@inject IPermissionService PermissionService
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.TradesIndexTitle;
+
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.TradesHeader</p>
+        <h1>@Resources.TradesHeader</h1>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-success" id="btnExport">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
+                <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z"/>
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+            </svg>
+            @Resources.ExportToExcel
+        </button>
+        <a href="@Url.Action("Create", "Trades")" class="btn tj-btn-primary">@Resources.AddNewTrade</a>
+    </div>
+</div>
+
+<partial name="_Alerts" />
+
+<div class="tj-card mb-3">
+    <div class="tj-card-header d-flex justify-content-between align-items-center">
+        <span>@Resources.Filters</span>
+        <button class="btn btn-sm btn-outline-secondary d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+            @Resources.Toggle
+        </button>
+    </div>
+    <div class="tj-card-body collapse d-md-block" id="filterCollapse">
+        <div class="row g-3">
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2"><input id="fSearch" class="form-control" placeholder="@Resources.Search" /></div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2"><input id="fSymbol" class="form-control" placeholder="@Resources.Symbol" /></div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2"><input id="fOrder" class="form-control" placeholder="@Resources.OrderNumber" /></div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <select id="fSession" class="form-select select2">
+                    <option value="">@Resources.AllSessions</option>
+                    @foreach (var s in ViewBag.Sessions)
+                    {
+                        <option value="@s.Id">@s.LocalizedName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <select id="fSystem" class="form-select select2">
+                    <option value="">@Resources.AllSystems</option>
+                    @foreach (var s in ViewBag.TradSystems)
+                    {
+                        <option value="@s.Id">@s.SystemName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <select id="fPattern" class="form-select select2">
+                    <option value="">@Resources.AllPatterns</option>
+                    @foreach (var p in ViewBag.Patterns)
+                    {
+                        <option value="@p.Id">@p.PatternName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <select id="fStatus" class="form-select select2">
+                    <option value="">@Resources.AllStatuses</option>
+                    <option value="1">@Resources.Status_Open</option>
+                    <option value="2">@Resources.Status_Closed</option>
+                    <option value="3">@Resources.Status_Cancelled</option>
+                </select>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <select id="fDirection" class="form-select select2">
+                    <option value="">@Resources.AllDirections</option>
+                    <option value="1">@Resources.Dir_Long</option>
+                    <option value="2">@Resources.Dir_Short</option>
+                </select>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <select id="fDemo" class="form-select select2">
+                    <option value="">@Resources.AllAccounts</option>
+                    <option value="true">@Resources.Demo</option>
+                    <option value="false">@Resources.Live</option>
+                </select>
+            </div>
+            @if (PermissionService.CurrentHas(PermissionCodes.UsersViewOthersTrades))
+            {
+                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <select id="fUser" class="form-select select2">
+                        <option value="">@Resources.All @Resources.Users</option>
+                        @foreach (var u in ViewBag.Users)
+                        {
+                            <option value="@u.Id">@u.DisplayName</option>
+                        }
+                    </select>
+                </div>
+            }
+            <div class="col-12">
+                <button type="button" id="btnReset" class="btn btn-sm btn-outline-secondary px-4">@Resources.ResetFilters</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tj-card">
+    <div class="tj-card-body">
+        <div class="table-responsive">
+            <table id="tradesTable" class="table table-hover align-middle" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>@Resources.ID</th>
+                        <th>@Resources.OrderNumber</th>
+                        <th>@Resources.Symbol</th>
+                        <th>@Resources.TradingSession</th>
+                        <th>@Resources.Direction</th>
+                        <th>@Resources.Status</th>
+                        <th>@Resources.StartTime</th>
+                        <th>@Resources.NetPnL</th>
+                        <th>@Resources.RiskRewardRatio</th>
+                        <th>@Resources.TradeDuration</th>
+                        <th>@Resources.Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/xls/xlsx.full.min.js")"></script>
+    <script>
+        $(function () {
+
+            var isPersian = '@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName' === 'fa';
+
+            $('#btnExport').on('click', function() {
+                var table = document.getElementById("tradesTable");
+                var wb = XLSX.utils.table_to_book(table, { sheet: "Trades" });
+                XLSX.writeFile(wb, "TradesArchive_" + new Date().toISOString().slice(0,10) + ".xlsx");
+            });
+
+
+            function buildParams(d) {
+                return {
+                    start: d.start, length: d.length,
+                    sortColumn: d.columns[d.order[0].column].data,
+                    sortDir: d.order[0].dir,
+                    search: $('#fSearch').val(),
+                    symbol: $('#fSymbol').val(),
+                    orderNumber: $('#fOrder').val(),
+                    sessionId: $('#fSession').val() || null,
+                    systemId: $('#fSystem').val() || null,
+                    patternId: $('#fPattern').val() || null,
+                    status: $('#fStatus').val() || null,
+                    direction: $('#fDirection').val() || null,
+                    isDemo: $('#fDemo').val() || null,
+                    userId: $('#fUser').val() || null
+                };
+            }
+
+
+            var dataTableOptions = {
+                searching  : false,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '@Url.Action("GetTrades", "Trades")',
+                    data: buildParams
+                },
+                columns: [
+                    { data: 'Id' },
+                    { data: 'OrderNumber', defaultContent: '—' },
+                    { data: 'TradeSymbol', defaultContent: '—' },
+                    { data: 'Session', defaultContent: '—' },
+                    {
+                        data: 'Direction', render: function (d, type, row) {
+                            var cls = row.DirectionKey === 'Long' ? 'badge-long' : 'badge-short';
+                            return '<span class="badge ' + cls + '">' + d + '</span>';
+                        }
+                    },
+                    { data: 'Status', render: function (d) { return '<span class="badge bg-secondary">' + d + '</span>'; } },
+                    {
+                        data: 'StartTime', render: function (d) {
+                            if (!d) return '';
+                            var dt = new Date(d);
+                            if (isPersian && typeof persianDate !== 'undefined') {
+                                return new persianDate(dt).format('YYYY/MM/DD HH:mm');
+                            }
+                            return dt.toLocaleString();
+                        }
+                    },
+                    {
+                        data: 'NetPnL', render: function (d) {
+                            if (d === null || d === undefined) return '—';
+                            var val = Number(d);
+                            var cls = val >= 0 ? 'text-success' : 'text-danger';
+                            return '<span class="' + cls + '">' + val.toLocaleString() + '</span>';
+                        }
+                    },
+                    {
+                        data: 'RiskRewardRatio', render: function (d) {
+                            return d === null || d === undefined ? '—' : Number(d).toFixed(2);
+                        }
+                    },
+                    { data: 'Duration', defaultContent: '—' },
+                    {
+                        data: 'Id', orderable: false, render: function (d) 
+                        {
+                            return '<div class="tj-row-actions" style="display:inline">' +
+
+                                '<form action="/Trades/Delete/' + d + '" method="post" class="d-inline" onsubmit="return confirm(\'@Resources.ConfirmDelete\')">' +
+                                '@Html.AntiForgeryToken()' +
+                                '<button class="btn btn-sm btn-outline-danger">@Resources.Delete</button></form></div>' +
+
+                                '<a href="/Trades/Edit/' + d + '" class="btn btn-sm btn-outline-primary">@Resources.Edit</a>' +
+
+                                '<a href="/Trades/Details/' + d + '" class="btn btn-sm btn-outline-secondary">@Resources.Details</a>';
+                        }
+                    }
+                ],
+                order: [[0, 'desc']],
+                pageLength: 25,
+                language: {
+                    emptyTable: '@Html.Raw(Resources.EmptyList)',
+
+                }
+            };
+
+            if (isPersian) 
+            {
+                dataTableOptions.language = { url: '@Url.Content("~/dataTable/fa.json")'};
+            }
+
+            var table = $('#tradesTable').DataTable(dataTableOptions);
+
+            $('#fSearch,#fSymbol,#fOrder,#fSession,#fSystem,#fPattern,#fStatus,#fDirection,#fDemo,#fUser').on('keyup change', function () { table.ajax.reload(); });
+
+            $('#btnReset').on('click', function () {
+                var $filters = $('#fSearch,#fSymbol,#fOrder,#fSession,#fSystem,#fPattern,#fStatus,#fDirection,#fDemo,#fUser');
+                $filters.val('').trigger('change');
+                if ($.fn.select2) {
+                    $('.select2').val(null).trigger('change');
+                }
+            });
+        });
+    </script>
+}

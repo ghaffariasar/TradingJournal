@@ -1,0 +1,70 @@
+@model TradingProject.Models.RegisterViewModel
+@using TradingProject.Resources
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.NewUserRegistration;
+}
+
+<div class="tj-card" style="width:min(500px,100%)">
+    <div class="tj-card-body p-4">
+        <p class="tj-kicker text-center">@Resources.TradingArchiveSystem</p>
+        <br/>
+        <h1 class="h4 text-center mb-1">@Resources.NewUserRegistration</h1>
+        <p class="text-center text-muted mb-4">@Resources.PleaseEnterYourInfo</p>
+
+        <form method="post" asp-action="Register">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+
+            <div class="mb-3">
+                <label asp-for="Username" class="form-label">@Resources.Username</label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DisplayName" class="form-label">@Resources.DisplayName</label>
+                <input asp-for="DisplayName" class="form-control" />
+                <span asp-validation-for="DisplayName" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">@Resources.Email</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Password" class="form-label">@Resources.Password</label>
+                    <input asp-for="Password" class="form-control" type="password" />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label">@Resources.ConfirmPassword</label>
+                    <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="alert alert-info py-2 px-3 small mb-4">
+                <h6 class="small fw-bold">@Resources.RegistrationPolicyInfo</h6>
+                <ul class="mb-0 ps-3">
+                    <li>@Resources.PolicyMinLength</li>
+                    <li>@Resources.PolicyUpperLower</li>
+                    <li>@Resources.PolicyNumberSpecial</li>
+                </ul>
+            </div>
+
+            <button type="submit" class="btn tj-btn-primary w-100 py-2">@Resources.RegisterNow</button>
+        </form>
+
+        <div class="mt-4 text-center">
+            <span class="text-muted small">@Resources.AlreadyRegistered</span>
+            <a href="@Url.Action("Login")" class="small text-decoration-none">@Resources.LoginNow</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

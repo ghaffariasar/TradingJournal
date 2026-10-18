@@ -1,0 +1,42 @@
+@using TradingProject.Resources
+@model IEnumerable<TradingProject.Models.Pattern>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.Patterns;
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.LookupData</p>
+        <h1>@Resources.Patterns</h1>
+    </div>
+    <a href="@Url.Action("Create")" class="btn tj-btn-primary">@Resources.AddNewPattern</a>
+</div>
+<partial name="_Alerts" />
+
+<div class="tj-card">
+    <div class="tj-card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>@Resources.ID</th><th>@Resources.PatternName</th><th>@Resources.Description</th><th>@Resources.IsActive</th><th>@Resources.Actions</th></tr></thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td>@p.Id</td><td>@p.PatternName</td><td>@p.Description</td>
+                            <td>
+                                <span class="tj-pill @(p.IsActive ? "is-on" : "is-off")">@(p.IsActive ? "✓" : "✗")</span>
+                            </td>
+                            <td class="tj-row-actions">
+                                <a href="@Url.Action("Edit", new { id = p.Id })" class="btn btn-sm btn-outline-primary">@Resources.Edit</a>
+                                <form asp-action="Delete" asp-route-id="@p.Id" method="post" class="d-inline" onsubmit="return confirm('@Resources.ConfirmDelete')">
+                                    <button class="btn btn-sm btn-outline-danger">@Resources.Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

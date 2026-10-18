@@ -1,0 +1,51 @@
+@using TradingProject.Resources
+@model IEnumerable<TradingProject.Models.ApplicationUser>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.Users;
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.LookupData</p>
+        <h1>@Resources.Users</h1>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="@Url.Action("Settings")" class="btn btn-outline-secondary">
+            <i class="bi bi-gear"></i> @Resources.SystemSettings
+        </a>
+        <a href="@Url.Action("Create")" class="btn tj-btn-primary">@Resources.AddNewUser</a>
+    </div>
+</div>
+<partial name="_Alerts" />
+
+<div class="tj-card">
+    <div class="tj-card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead><tr><th>@Resources.ID</th><th>@Resources.Username</th><th>@Resources.DisplayName</th><th>@Resources.Email</th><th>@Resources.Role</th><th>@Resources.IsActive</th><th>@Resources.Actions</th></tr></thead>
+                <tbody>
+                    @foreach (var u in Model)
+                    {
+                        <tr>
+                            <td>@u.Id</td><td>@u.Username</td><td>@u.DisplayName</td><td>@u.Email</td>
+                            <td>@u.AppRole?.LocalizedName</td>
+                            <td>
+                                <span class="tj-pill @(u.IsActive ? "is-on" : "is-off")">@(u.IsActive ? "✓" : "✗")</span>
+                            </td>
+                            <td class="tj-row-actions">
+                                <a href="@Url.Action("UserReport", new { id = u.Id })" class="btn btn-sm btn-outline-info" title="@Resources.Reports"><i class="bi bi-graph-up"></i> @Resources.Reports</a>
+
+                                <a href="@Url.Action("Edit", new { id = u.Id })" class="btn btn-sm btn-outline-primary" title="@Resources.Edit"><i class="bi bi-pencil"></i> @Resources.Edit</a>
+                                
+                                <form asp-action="Delete" asp-route-id="@u.Id" method="post" class="d-inline" onsubmit="return confirm('@Resources.ConfirmDelete')">
+                                    <button class="btn btn-sm btn-outline-danger" title="@Resources.Delete"><i class="bi bi-trash"></i> @Resources.Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

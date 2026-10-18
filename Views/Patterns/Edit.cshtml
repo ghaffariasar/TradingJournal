@@ -1,0 +1,20 @@
+﻿@using TradingProject.Resources
+@model TradingProject.Models.Pattern
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.EditPatternTitle; // کلید: EditPatternTitle => "ویرایش پترن معاملاتی" / "Edit Trading Pattern"
+}
+<h2>@Resources.EditPattern</h2>
+<form asp-action="Edit" method="post" asp-antiforgery="true">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="PatternName">@Resources.PatternName</label>
+        <input asp-for="PatternName" class="form-control" />
+        <span asp-validation-for="PatternName" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">@Resources.Update</button>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

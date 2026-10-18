@@ -1,0 +1,65 @@
+@using TradingProject.Resources
+@using TradingProject.Models.Enums
+@model TradingProject.Models.TradeEmotion
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var isEdit = Model?.Id > 0;
+    ViewData["Title"] = isEdit ? Resources.EditEmotion : Resources.AddEmotion;
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.Emotions</p>
+        <h1>@(isEdit ? Resources.EditEmotion : Resources.AddEmotion)</h1>
+    </div>
+</div>
+
+<div class="tj-card">
+    <div class="tj-card-body">
+        <form asp-action="@(isEdit ? "Edit" : "Create")" method="post" asp-antiforgery="true">
+            @Html.AntiForgeryToken()
+            @if (isEdit) { <input type="hidden" asp-for="Id" /> }
+            <input type="hidden" asp-for="CreatedDate" />
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="Category"></label>
+                    <select asp-for="Category" class="form-select" required>
+                        @foreach (EmotionCategory c in ViewBag.Categories)
+                        {
+                            <option value="@((int)c)">@(Resources.ResourceManager.GetString("Emotion_" + c) ?? c.ToString())</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Category" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" required />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="NameFa"></label>
+                    <input asp-for="NameFa" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" asp-for="SortOrder"></label>
+                    <input asp-for="SortOrder" type="number" class="form-control" />
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label asp-for="IsActive" class="form-check-label">@Resources.IsActive</label>
+                    </div>
+                </div>
+            </div>
+            <div class="tj-form-actions">
+                <button type="submit" class="btn tj-btn-primary">@(isEdit ? Resources.Update : Resources.Save)</button>
+                <a href="@Url.Action("Index")" class="btn btn-outline-secondary">@Resources.Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,15 @@
+@using TradingProject.Resources
+@model TradingProject.Models.Trade
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.EditTradeTitle;
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.TradesHeader</p>
+        <h1>@Resources.EditTradeHeader</h1>
+    </div>
+</div>
+
+<partial name="_TradeForm" model="Model" />

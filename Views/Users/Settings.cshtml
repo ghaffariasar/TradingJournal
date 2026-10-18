@@ -1,0 +1,40 @@
+@using TradingProject.Resources
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.SystemSettings;
+    bool regEnabled = ViewBag.RegistrationEnabled;
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.SystemManagement</p>
+        <h1>@Resources.SystemSettings</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="tj-card">
+            <div class="tj-card-header">@Resources.UserRegistration</div>
+            <div class="tj-card-body">
+                <form asp-action="UpdateRegistrationSetting" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div>
+                            <h6 class="mb-1">@Resources.RegistrationEnabled</h6>
+                            <p class="text-muted small mb-0">@Resources.RegistrationEnabledDescription</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="enabled" value="true" id="regSwitch" @(regEnabled ? "checked" : "") style="width: 3em; height: 1.5em;">
+                            <input type="hidden" name="enabled" value="false">
+                        </div>
+                    </div>
+                    <div class="border-top pt-3">
+                        <button type="submit" class="btn tj-btn-primary px-4">@Resources.SaveChanges</button>
+                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary px-4 ms-2">@Resources.Back</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

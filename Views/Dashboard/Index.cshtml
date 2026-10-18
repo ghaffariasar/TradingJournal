@@ -1,0 +1,307 @@
+@using TradingProject.Resources
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.DashboardTitle;
+    var langIsFa = Thread.CurrentThread.CurrentUICulture.Name == "fa-IR";
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.DashboardHeader</p>
+        <h1>@Resources.DashboardTitle</h1>
+    </div>
+</div>
+
+<div class="tj-card mb-3">
+    <div class="tj-card-header d-flex justify-content-between align-items-center">
+        <span>@Resources.Filters</span>
+        <button class="btn btn-sm btn-outline-secondary d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+            @Resources.Toggle
+        </button>
+    </div>
+    <div class="tj-card-body collapse d-md-block" id="filterCollapse">
+        <div class="row g-3">
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <label class="form-label small">@Resources.FromDate</label>
+                @if (langIsFa)
+                {
+                    <div class="tj-date-wrap">
+                        <input type="text" id="fFrom" class="form-control form-control-sm tj-date-input" />
+                        <input type="hidden" id="fFromValue" class="tj-date-value" />
+                    </div>
+                }
+                else
+                {
+                    <input type="date" id="fFrom" class="form-control form-control-sm" />
+                }
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <label class="form-label small">@Resources.ToDate</label>
+                @if (langIsFa)
+                {
+                    <div class="tj-date-wrap">
+                        <input type="text" id="fTo" class="form-control form-control-sm tj-date-input" />
+                        <input type="hidden" id="fToValue" class="tj-date-value" />
+                    </div>
+                }
+                else
+                {
+                    <input type="date" id="fTo" class="form-control form-control-sm" />
+                }
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2"><label class="form-label small">@Resources.Symbol</label><select id="fSymbol" class="form-select form-select-sm select2"><option value="">@Resources.All</option></select></div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2"><label class="form-label small">@Resources.Broker</label><select id="fBroker" class="form-select form-select-sm select2"><option value="">@Resources.All</option></select></div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2"><label class="form-label small">@Resources.TradingAccount</label><select id="fAccount" class="form-select form-select-sm select2"><option value="">@Resources.All</option></select></div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2"><label class="form-label small">@Resources.TradingSession</label><select id="fSession" class="form-select form-select-sm select2"><option value="">@Resources.All</option></select></div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2"><label class="form-label small">@Resources.TradSystems</label><select id="fSystem" class="form-select form-select-sm select2"><option value="">@Resources.All</option></select></div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2"><label class="form-label small">@Resources.Patterns</label><select id="fPattern" class="form-select form-select-sm select2"><option value="">@Resources.All</option></select></div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <label class="form-label small">@Resources.Status</label>
+                <select id="fStatus" class="form-select form-select-sm select2">
+                    <option value="">@Resources.All</option>
+                    <option value="1">@Resources.Status_Open</option>
+                    <option value="2">@Resources.Status_Closed</option>
+                    <option value="3">@Resources.Status_Cancelled</option>
+                </select>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <label class="form-label small">@Resources.Direction</label>
+                <select id="fDirection" class="form-select form-select-sm select2">
+                    <option value="">@Resources.All</option>
+                    <option value="1">@Resources.Dir_Long</option>
+                    <option value="2">@Resources.Dir_Short</option>
+                </select>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <label class="form-label small">@Resources.AccountType</label>
+                <select id="fDemo" class="form-select form-select-sm select2">
+                    <option value="">@Resources.All</option>
+                    <option value="true">@Resources.Demo</option>
+                    <option value="false">@Resources.Live</option>
+                </select>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 d-none" id="userFilterCol">
+                <label class="form-label small">@Resources.Users</label>
+                <select id="fUser" class="form-select form-select-sm select2">
+                    <option value="">@Resources.All</option>
+                </select>
+            </div>
+            <div class="col-12 d-flex gap-2 mt-2">
+                <button type="button" id="btnApply" class="btn btn-sm tj-btn-primary px-4">@Resources.ApplyFilters</button>
+                <button type="button" id="btnReset" class="btn btn-sm btn-outline-secondary px-4">@Resources.ResetFilters</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-6 col-xl-2"><div class="tj-kpi"><div class="label">@Resources.TotalTrades</div><div class="value" id="kpiTotal">0</div></div></div>
+    <div class="col-6 col-xl-2"><div class="tj-kpi accent-pnl"><div class="label">@Resources.NetPnL</div><div class="value" id="kpiPnl">0</div></div></div>
+    <div class="col-6 col-xl-2"><div class="tj-kpi"><div class="label">@Resources.WinRate</div><div class="value" id="kpiWin">0%</div></div></div>
+    <div class="col-6 col-xl-2"><div class="tj-kpi"><div class="label">@Resources.AvgRiskReward</div><div class="value" id="kpiRr">0</div></div></div>
+    <div class="col-6 col-xl-2"><div class="tj-kpi"><div class="label">@Resources.AvgDuration</div><div class="value" id="kpiDur">—</div></div></div>
+    <div class="col-6 col-xl-2"><div class="tj-kpi"><div class="label">@Resources.ProfitFactor</div><div class="value" id="kpiPf">0</div></div></div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-6"><div class="tj-card mb-3"><div class="tj-card-header">@Resources.WinLoss</div><div class="tj-card-body tj-chart-wrap"><canvas id="winLossChart"></canvas><div class="tj-chart-empty d-none">@Resources.NoData</div></div></div></div>
+    <div class="col-lg-6"><div class="tj-card mb-3"><div class="tj-card-header">@Resources.MonthlyPnl</div><div class="tj-card-body tj-chart-wrap"><canvas id="monthlyChart"></canvas><div class="tj-chart-empty d-none">@Resources.NoData</div></div></div></div>
+    <div class="col-12"><div class="tj-card mb-3"><div class="tj-card-header">@Resources.EquityCurve</div><div class="tj-card-body tj-chart-wrap"><canvas id="equityChart"></canvas><div class="tj-chart-empty d-none">@Resources.NoData</div></div></div></div>
+    <div class="col-12"><div class="tj-card mb-3"><div class="tj-card-header">@Resources.Drawdown</div><div class="tj-card-body tj-chart-wrap"><canvas id="drawdownChart"></canvas><div class="tj-chart-empty d-none">@Resources.NoData</div></div></div></div>
+    <div class="col-lg-6"><div class="tj-card mb-3"><div class="tj-card-header">@Resources.SessionPerformance</div><div class="tj-card-body tj-chart-wrap"><canvas id="sessionChart"></canvas><div class="tj-chart-empty d-none">@Resources.NoData</div></div></div></div>
+    <div class="col-lg-6"><div class="tj-card mb-3"><div class="tj-card-header">@Resources.EmotionPerformance</div><div class="tj-card-body tj-chart-wrap"><canvas id="emotionChart"></canvas><div class="tj-chart-empty d-none">@Resources.NoData</div></div></div></div>
+    <div class="col-lg-6"><div class="tj-card mb-3"><div class="tj-card-header">@Resources.BestSystems</div><div class="tj-card-body tj-chart-wrap"><canvas id="systemsChart"></canvas><div class="tj-chart-empty d-none">@Resources.NoData</div></div></div></div>
+    <div class="col-lg-6"><div class="tj-card mb-3"><div class="tj-card-header">@Resources.BestPatterns</div><div class="tj-card-body tj-chart-wrap"><canvas id="patternsChart"></canvas><div class="tj-chart-empty d-none">@Resources.NoData</div></div></div></div>
+</div>
+
+@section Scripts {
+    <script>
+        var charts = {};
+        var langIsFa = @langIsFa.ToString().ToLower();
+        var noDataText = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Resources.NoData));
+        function chartColor() {
+            return getComputedStyle(document.documentElement).getPropertyValue('--tj-text').trim() || '#1a2332';
+        }
+        function filterParams() {
+            var fromEl = $('#fFromValue');
+            var toEl = $('#fToValue');
+            return {
+                fromDate: (fromEl.length ? fromEl.val() : $('#fFrom').val()) || null,
+                toDate: (toEl.length ? toEl.val() : $('#fTo').val()) || null,
+                symbolId: $('#fSymbol').val() || null,
+                brokerId: $('#fBroker').val() || null,
+                accountId: $('#fAccount').val() || null,
+                sessionId: $('#fSession').val() || null,
+                systemId: $('#fSystem').val() || null,
+                patternId: $('#fPattern').val() || null,
+                status: $('#fStatus').val() || null,
+                direction: $('#fDirection').val() || null,
+                isDemo: $('#fDemo').val() || null,
+                userId: $('#fUser').val() || null
+            };
+        }
+
+        $.getJSON('@Url.Action("GetFilterOptions", "Dashboard")', function (d) 
+        {                                        
+            (d.symbols || []).forEach(s => 
+                {
+                    if(langIsFa){
+                       $('#fSymbol').append('<option value="' + s.Id + '">' + s.NameFa + ' | ' + s.Instrument + ' | ' + s.Symbol + '</option>')
+                    }
+                    else{
+                       $('#fSymbol').append('<option value="' + s.Id + '">' + s.Instrument + ' | ' + s.Symbol + ' | ' + s.Name + '</option>')
+                    }
+                });
+            (d.brokers || []).forEach(b => $('#fBroker').append('<option value="' + b.Id + '">' + b.Name + '</option>'));
+            (d.accounts || []).forEach(a => $('#fAccount').append('<option value="' + a.Id + '">' + a.Name + '</option>'));
+            (d.systems || []).forEach(s => $('#fSystem').append('<option value="' + s.Id + '">' + s.SystemName + '</option>'));
+            (d.patterns || []).forEach(p => $('#fPattern').append('<option value="' + p.Id + '">' + p.PatternName + '</option>'));
+            (d.sessions || []).forEach(s => {
+                var name = @(langIsFa ? "s.NameFa || s.Name" : "s.Name");
+                $('#fSession').append('<option value="' + s.Id + '">' + name + '</option>');
+            });
+            if (d.users) {
+                $('#userFilterCol').removeClass('d-none');
+                d.users.forEach(u => $('#fUser').append('<option value="' + u.Id + '">' + (u.DisplayName || u.Username) + '</option>'));
+            }
+        });
+
+        function reloadAll() {
+            var p = filterParams();
+            $.getJSON('@Url.Action("GetKpis", "Dashboard")', p, function (d) {
+                $('#kpiTotal').text(d.totalTrades);
+                var pnl = Number(d.netPnl);
+                $('#kpiPnl').text(pnl.toLocaleString()).toggleClass('text-danger', pnl < 0).toggleClass('text-success', pnl >= 0);
+                $('#kpiWin').text(d.winRate + '%');
+                $('#kpiPf').text(d.profitFactor);
+                $('#kpiRr').text(d.avgRiskReward);
+                $('#kpiDur').text(d.avgDuration || '—');
+            });
+            $.getJSON('@Url.Action("GetWinLoss", "Dashboard")', p, function (d) {
+                drawPie('winLossChart', ['@Html.Raw(Resources.Wins)', '@Html.Raw(Resources.Losses)', '@Html.Raw(Resources.Open)'], [d.wins, d.losses, d.open], ['#10b981', '#ef4444', '#f59e0b']);
+            });
+            $.getJSON('@Url.Action("GetMonthlyPnl", "Dashboard")', p, function (d) {
+                drawBar('monthlyChart', d.map(x => x.label), d.map(x => x.netPnl), '#6366f1');
+            });
+            $.getJSON('@Url.Action("GetEquityCurve", "Dashboard")', p, function (d) {
+                drawLine('equityChart', d.map(x => x.date), d.map(x => x.equity), '#10b981');
+            });
+            $.getJSON('@Url.Action("GetDrawdown", "Dashboard")', p, function (d) {
+                drawLine('drawdownChart', d.map(x => x.date), d.map(x => x.drawdown), '#ef4444', true);
+            });
+            $.getJSON('@Url.Action("GetSessionPerformance", "Dashboard")', p, function (d) {
+                drawBar('sessionChart', d.map(x => x.sessionName), d.map(x => x.netPnl), '#0ea5e9');
+            });
+            $.getJSON('@Url.Action("GetEmotionPerformance", "Dashboard")', p, function (d) {
+                drawBar('emotionChart', d.map(x => x.emotion), d.map(x => x.netPnl), '#f59e0b');
+            });
+            $.getJSON('@Url.Action("GetTopSystems", "Dashboard")', p, function (d) {
+                drawBar('systemsChart', d.map(x => x.SystemName), d.map(x => x.NetPnl), '#4f46e5');
+            });
+            $.getJSON('@Url.Action("GetTopPatterns", "Dashboard")', p, function (d) {
+                drawBar('patternsChart', d.map(x => x.PatternName), d.map(x => x.NetPnl), '#8b5cf6');
+            });
+        }
+
+        function destroy(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+        function emptyState(id, isEmpty) {
+            var wrap = $('#' + id).closest('.tj-chart-wrap');
+            wrap.find('.tj-chart-empty').toggleClass('d-none', !isEmpty);
+            $('#' + id).toggleClass('d-none', isEmpty);
+        }
+        function baseOptions() {
+            var c = chartColor();
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { 
+                        labels: { 
+                            color: c,
+                            font: { size: 11 }
+                        } 
+                    } 
+                },
+                scales: {
+                    x: { 
+                        ticks: { color: c, font: { size: 10 } }, 
+                        grid: { color: 'rgba(148,163,184,.1)' } 
+                    },
+                    y: { 
+                        ticks: { color: c, font: { size: 10 } }, 
+                        grid: { color: 'rgba(148,163,184,.1)' } 
+                    }
+                }
+            };
+        }
+        function drawPie(id, labels, data, colors) {
+            destroy(id);
+            var empty = !data || data.every(v => !v);
+            emptyState(id, empty);
+            if (empty) return;
+            charts[id] = new Chart(document.getElementById(id), { 
+                type: 'doughnut', 
+                data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] }, 
+                options: { 
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom',
+                            labels: { color: chartColor(), font: { size: 11 } } 
+                        } 
+                    },
+                    cutout: '70%'
+                } 
+            });
+        }
+        function drawBar(id, labels, data, color) {
+            destroy(id);
+            var empty = !data || data.length === 0;
+            emptyState(id, empty);
+            if (empty) return;
+            var opts = baseOptions();
+            opts.plugins.legend = { display: false };
+            charts[id] = new Chart(document.getElementById(id), { 
+                type: 'bar', 
+                data: { labels, datasets: [{ data, backgroundColor: color, borderRadius: 4 }] }, 
+                options: opts 
+            });
+        }
+        function drawLine(id, labels, data, color, fill) {
+            destroy(id);
+            var empty = !data || data.length === 0;
+            emptyState(id, empty);
+            if (empty) return;
+            var opts = baseOptions();
+            opts.plugins.legend = { display: false };
+            charts[id] = new Chart(document.getElementById(id), { 
+                type: 'line', 
+                data: { 
+                    labels, 
+                    datasets: [{ 
+                        data, 
+                        borderColor: color, 
+                        backgroundColor: color + '22', 
+                        fill: fill !== false, 
+                        tension: 0.4,
+                        pointRadius: 2,
+                        pointHoverRadius: 5
+                    }] 
+                }, 
+                options: opts 
+            });
+        }
+
+        $('#btnApply').on('click', reloadAll);
+        $('#btnReset').on('click', function () {
+            var $filters = $('#fFrom,#fTo,#fFromValue,#fToValue,#fSymbol,#fBroker,#fAccount,#fSession,#fSystem,#fPattern,#fStatus,#fDirection,#fDemo,#fUser');
+            $filters.val('').trigger('change');
+            if ($.fn.select2) {
+                $('.select2').val(null).trigger('change');
+            }
+        });
+        $('#fFrom,#fTo,#fFromValue,#fToValue,#fSymbol,#fBroker,#fAccount,#fSession,#fSystem,#fPattern,#fStatus,#fDirection,#fDemo,#fUser').on('change', reloadAll);
+        reloadAll();
+    </script>
+}

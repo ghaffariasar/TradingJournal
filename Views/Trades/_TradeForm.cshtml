@@ -1,0 +1,452 @@
+@using System.Text.Json
+@using TradingProject.Resources
+@using TradingProject.Helpers
+@using TradingProject.Models
+@model TradingProject.Models.Trade
+@{
+
+    var isEdit = Model.Id > 0;
+    var preselectedSystems = ViewBag.PreselectedSystemIds as List<int> ?? [];
+    var preselectedPatterns = ViewBag.PreselectedPatternIds as List<int> ?? [];
+    var preselectedEmotions = ViewBag.PreselectedEmotionIds as List<int> ?? [];
+    var langIsFa = Thread.CurrentThread.CurrentUICulture.Name == "fa-IR";
+    IEnumerable<TradingSession> sessions = ViewBag.Sessions ?? Enumerable.Empty<TradingSession>();
+    IEnumerable<TradeAnalysisOutcome> outcomes = ViewBag.AnalysisOutcomes ?? Enumerable.Empty<TradeAnalysisOutcome>();
+    IEnumerable<TradeEmotion> emotions = ViewBag.Emotions ?? Enumerable.Empty<TradeEmotion>();
+}
+
+<form asp-action="@(isEdit ? "Edit" : "Create")" method="post" enctype="multipart/form-data" asp-antiforgery="true" id="tradeForm" novalidate>
+    @Html.AntiForgeryToken()
+    @if (isEdit)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+
+    <partial name="_Alerts" />
+    <div id="formAlert" class="alert alert-danger d-none" role="alert">
+    </div>
+
+    <div asp-validation-summary="All" class="text-danger small mb-3"></div>
+
+    <div class="tj-card mb-3">
+        <div class="tj-card-header">@Resources.GeneralInfo</div>
+        <div class="tj-card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">@Resources.OrderNumber </label>
+                    <input asp-for="OrderNumber" class="form-control" required />
+                    <span asp-validation-for="OrderNumber" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@Resources.Symbol</label>
+                    <select asp-for="SymbolId" id="SymbolId" class="form-select select2" data-placeholder="@Resources.SelectSymbol" required>
+                        <option value=""></option>
+                        @{
+                            if (langIsFa)
+                            {
+                                foreach (var s in ViewBag.Symbols)
+                                {
+                                    <option value="@s.Id" data-symbol-name="@s.NameFa" data-symbol="@s.Symbol">
+                                        @s.NameFa | @s.Instrument | @s.Symbol
+                                    </option>
+                                }
+                            }
+                            else
+                            {
+                                foreach (var s in ViewBag.Symbols)
+                                {
+                                    <option value="@s.Id" data-symbol-name="@s.Name" data-symbol="@s.Symbol">
+                                        @s.Instrument | @s.Symbol | @s.Name
+                                    </option>
+                                }
+                            }
+                        }
+                       
+                    </select>
+                    <span asp-validation-for="SymbolId" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">
+                        @Resources.TradeSymbol
+                    </label>
+                    <input asp-for="TradeSymbol" id="TradeSymbol" class="form-control" readonly="readonly" required />
+                    <span asp-validation-for="TradeSymbol" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@Resources.Timeframe</label>
+                    <select asp-for="Timeframe" class="form-select">
+                        <option value="">—</option>
+                        @foreach (var tf in ViewBag.Timeframes)
+                        {
+                            <option value="@((int)tf)">@tf</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@Resources.Direction</label>
+                    <select asp-for="Direction" class="form-select">
+                        @foreach (var d in ViewBag.Directions)
+                        {
+                            <option value="@((int)d)">@(Resources.ResourceManager.GetString("Dir_" + d) ?? d.ToString())</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@Resources.Status</label>
+                    <select asp-for="Status" class="form-select">
+                        @foreach (var st in ViewBag.Statuses)
+                        {
+                            <option value="@((int)st)">@(Resources.ResourceManager.GetString("Status_" + st) ?? st.ToString())</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@Resources.Broker</label>
+                    <select asp-for="BrokerId" class="form-select select2" data-placeholder="@Resources.SelectBroker">
+                        <option value=""></option>
+                        @foreach (var b in ViewBag.Brokers)
+                        {
+                            <option value="@b.Id">@b.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@Resources.TradingAccount</label>
+                    <select asp-for="TradingAccountId" class="form-select select2" data-placeholder="@Resources.SelectAccount">
+                        <option value=""></option>
+                        @foreach (var a in ViewBag.Accounts)
+                        {
+                            <option value="@a.Id">@string.Join(" | ", a.Name, a.AccountNumber)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@Resources.TradingSession</label>
+                    <select asp-for="TradingSessionId" class="form-select select2" data-placeholder="@Resources.SelectSession">
+                        <option value=""></option>
+                        @foreach (var s in sessions)
+                        {
+                            <option value="@s.Id">@s.LocalizedName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tj-card mb-3">
+        <div class="tj-card-header">@Resources.PricesAndRisk</div>
+        <div class="tj-card-body">
+            <div class="row g-3">
+                <div class="col-md-3"><label class="form-label">@Resources.LotSize</label><input asp-for="LotSize" type="number" step="0.01" min="0.01" class="form-control" required /><span asp-validation-for="LotSize" class="text-danger small"></span></div>
+                <div class="col-md-3"><label class="form-label">@Resources.EntryPrice</label><input asp-for="EntryPrice" type="number" step="0.00001" min="0.00001" class="form-control" required /><span asp-validation-for="EntryPrice" class="text-danger small"></span></div>
+                <div class="col-md-3"><label class="form-label">@Resources.ExitPrice</label><input asp-for="ExitPrice" type="number" step="0.00001" class="form-control" /><span asp-validation-for="ExitPrice" class="text-danger small"></span></div>
+                <div class="col-md-3"><label class="form-label">@Resources.StopLoss</label><input asp-for="StopLoss" type="number" step="0.00001" class="form-control" /></div>
+                <div class="col-md-3"><label class="form-label">@Resources.TakeProfit</label><input asp-for="TakeProfit" type="number" step="0.00001" class="form-control" /></div>
+                <div class="col-md-3"><label class="form-label">@Resources.AccountBalance</label><input asp-for="AccountBalance" type="number" step="0.01" class="form-control" /></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tj-card mb-3">
+        <div class="tj-card-header">@Resources.Results</div>
+        <div class="tj-card-body">
+            <div class="row g-3">
+                <div class="col-md-3"><label class="form-label">@Resources.RealizedPnL</label><input asp-for="RealizedPnL" type="number" step="0.01" class="form-control" /></div>
+                <div class="col-md-3"><label class="form-label">@Resources.Fees</label><input asp-for="Fees" type="number" step="0.01" class="form-control" /></div>
+                <div class="col-md-3"><label class="form-label">@Resources.RiskAmount</label><input asp-for="RiskAmount" type="number" step="0.01" class="form-control" /></div>
+                <div class="col-md-6"><label class="form-label">@Resources.ExitReason</label><input asp-for="ExitReason" class="form-control" /></div>
+                <div class="col-md-6">
+                    <div class="form-check mt-4">
+                        <input asp-for="IsPass" class="form-check-input" type="checkbox" />
+                        <label asp-for="IsPass" class="form-check-label">@Resources.IsPass</label>
+                    </div>
+                    <div class="form-check mt-2">
+                        <input asp-for="IsDemoAccount" class="form-check-input" type="checkbox" />
+                        <label asp-for="IsDemoAccount" class="form-check-label">@Resources.IsDemoAccount</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">@Resources.NetPnL</label>
+                    <input class="form-control" value="@(Model.NetPnL?.ToString("N2") ?? "—")" readonly />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">@Resources.RiskRewardRatio</label>
+                    <input class="form-control" value="@(Model.RiskRewardRatio?.ToString("0.##") ?? "—")" readonly />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">@Resources.TradeDuration</label>
+                    <input class="form-control" value="@TradeMetricsCalculator.FormatDuration(Model.DurationMinutes)" readonly />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tj-card mb-3">
+        <div class="tj-card-header">@Resources.SystemsAndPatterns</div>
+        <div class="tj-card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">@Resources.TradSystems</label>
+                    <select name="selectedSystemIds" class="form-select select2" multiple="multiple" data-placeholder="@Resources.SelectSystems">
+                        @foreach (var s in ViewBag.TradSystems)
+                        {
+                            <option value="@s.Id" selected="@preselectedSystems.Contains(s.Id)">@s.SystemName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">@Resources.Patterns</label>
+                    <select name="selectedPatternIds" class="form-select select2" multiple="multiple" data-placeholder="@Resources.SelectPatterns">
+                        @foreach (var p in ViewBag.Patterns)
+                        {
+                            <option value="@p.Id" selected="@preselectedPatterns.Contains(p.Id)">@p.PatternName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tj-card mb-3">
+        <div class="tj-card-header">@Resources.Psychology</div>
+        <div class="tj-card-body">
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <label class="form-label">@Resources.TradeAnalysisOutcome</label>
+                    <select asp-for="TradeAnalysisOutcomeId" class="form-select select2" data-placeholder="@Resources.TradeAnalysisOutcome">
+                        <option value=""></option>
+                        @foreach (var o in outcomes)
+                        {
+                            <option value="@o.Id">@o.LocalizedName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">@Resources.EmotionsAtEntry</label>
+                    <select name="selectedEmotionIds" class="form-select select2" multiple="multiple">
+                        @foreach (var e in emotions.Where(x => x.Category == TradingProject.Models.Enums.EmotionCategory.AtEntry))
+                        {
+                            <option value="@e.Id" selected="@preselectedEmotions.Contains(e.Id)">@e.LocalizedName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">@Resources.EmotionsDuringTrade</label>
+                    <select name="selectedEmotionIds" class="form-select select2" multiple="multiple">
+                        @foreach (var e in emotions.Where(x => x.Category == TradingProject.Models.Enums.EmotionCategory.DuringTrade))
+                        {
+                            <option value="@e.Id" selected="@preselectedEmotions.Contains(e.Id)">@e.LocalizedName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">@Resources.EmotionsAfterClose</label>
+                    <select name="selectedEmotionIds" class="form-select select2" multiple="multiple">
+                        @foreach (var e in emotions.Where(x => x.Category == TradingProject.Models.Enums.EmotionCategory.AfterClose))
+                        {
+                            <option value="@e.Id" selected="@preselectedEmotions.Contains(e.Id)">@e.LocalizedName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tj-card mb-3">
+        <div class="tj-card-header">@Resources.SetupChecklist</div>
+        <div class="tj-card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-check"><input asp-for="TrendConfirmation1M" class="form-check-input" type="checkbox" /><label asp-for="TrendConfirmation1M" class="form-check-label">@Resources.TrendConfirmation1M</label></div>
+                    <div class="form-check"><input asp-for="TrendConfirmation5M" class="form-check-input" type="checkbox" /><label asp-for="TrendConfirmation5M" class="form-check-label">@Resources.TrendConfirmation5M</label></div>
+                    <div class="form-check"><input asp-for="TrendConfirmation15M" class="form-check-input" type="checkbox" /><label asp-for="TrendConfirmation15M" class="form-check-label">@Resources.TrendConfirmation15M</label></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-check"><input asp-for="DivergenceHD" class="form-check-input" type="checkbox" /><label asp-for="DivergenceHD" class="form-check-label">@Resources.DivergenceHD</label></div>
+                    <div class="form-check"><input asp-for="DivergenceRD" class="form-check-input" type="checkbox" /><label asp-for="DivergenceRD" class="form-check-label">@Resources.DivergenceRD</label></div>
+                    <div class="form-check"><input asp-for="EOC" class="form-check-input" type="checkbox" /><label asp-for="EOC" class="form-check-label">@Resources.EndOfCorrection</label></div>
+                    <div class="form-check"><input asp-for="EOW" class="form-check-input" type="checkbox" /><label asp-for="EOW" class="form-check-label">@Resources.EndOfWay</label></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tj-card mb-3">
+        <div class="tj-card-header">@Resources.TimesAndNotes</div>
+        <div class="tj-card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">@Resources.StartTime </label>
+                    
+                    @if (langIsFa)
+                    {
+                        <div class="tj-date-wrap">
+                            <input type="text" class="form-control tj-date-input" data-time="true" value="@DateHelper.ToPersian(Model.StartTime)" required />
+                            <input asp-for="StartTime" class="tj-date-value" type="hidden" value="@DateHelper.ToInputValue(Model.StartTime)" />
+                        </div>
+                    }
+                    else
+                    {
+                        <input asp-for="StartTime" type="datetime-local" class="form-control" value="@DateHelper.ToInputValue(Model.StartTime)" required />
+                    }
+                    <span asp-validation-for="StartTime" class="text-danger small"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">@Resources.EndTime</label>
+                    @if (langIsFa)
+                    {
+                        <div class="tj-date-wrap">
+                            <input type="text" class="form-control tj-date-input" data-time="true" value="@DateHelper.ToPersian(Model.EndTime)" />
+                            <input asp-for="EndTime" class="tj-date-value" type="hidden" value="@DateHelper.ToInputValue(Model.EndTime)" />
+                        </div>
+                    }
+                    else
+                    {
+                        <input asp-for="EndTime" type="datetime-local" class="form-control" value="@DateHelper.ToInputValue(Model.EndTime)" />
+                    }
+                    <span asp-validation-for="EndTime" class="text-danger small"></span>
+                </div>
+                <div class="col-md-12"><label class="form-label">@Resources.Notes</label><textarea asp-for="Notes" class="form-control" rows="3"></textarea></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tj-card mb-3">
+        <div class="tj-card-header">@Resources.Attachments</div>
+
+        <div class="tj-card-body">
+            <input type="file"
+                   name="attachments"
+                   multiple
+                   class="form-control" />
+
+            @if (isEdit && Model.Attachments != null && Model.Attachments.Any())
+            {
+                <div class="mt-3">
+                    @foreach (var att in Model.Attachments)
+                    {
+                        <div class="d-flex justify-content-between align-items-center border rounded p-2 mb-1">
+                            <a href="@Url.Action("DownloadAttachment", "Trades", new { id = att.Id })"
+                               target="_blank">
+                                @att.FileName
+                            </a>
+
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger"
+                                    onclick="deleteTradeAttachment('@Url.Action("DeleteAttachment", "Trades", new { id = att.Id })', this)">
+                                @Resources.Delete
+                            </button>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+
+    <div class="tj-form-actions">
+        <button type="submit" name="submitAction" value="Save" class="btn tj-btn-primary">@Resources.Save</button>
+        <button type="submit" name="submitAction" value="SaveNew" class="btn btn-outline-primary">@Resources.SaveAndNew</button>
+        @if (!isEdit)
+        {
+            <button type="submit" name="submitAction" value="SaveCopy" class="btn btn-outline-secondary">@Resources.SaveAndCopy</button>
+        }
+        <a href="@Url.Action("Index", "Trades")" class="btn btn-outline-secondary">@Resources.Cancel</a>
+    </div>
+</form>
+
+<partial name="_ValidationScriptsPartial" />
+
+<script>
+    function syncTradeSymbol() {
+        var $sel = $('#SymbolId');
+        var opt = $sel.find('option:selected').first();
+        var sym = opt.attr('data-symbol') === undefined ? "" : (opt.attr('data-symbol') + " - " + opt.attr('data-symbol-name')) || opt.data('symbol');
+        var $ts = $('#TradeSymbol');
+        if (sym) {
+            if (!$ts.val() || $ts.data('auto') === true) 
+            {
+                $ts.val(sym);
+                $ts.data('auto', true);
+            }
+        } else if ($sel.val() === '') 
+        {
+            $ts.val('');
+            $ts.data('auto', true);
+        }
+    }
+
+    $('#SymbolId').on('change select2:select select2:clear', function () {
+        syncTradeSymbol();
+    });
+
+    $('#TradeSymbol').on('input', function () {
+        $(this).data('auto', false);
+    });
+
+    syncTradeSymbol();
+
+
+
+     async function deleteTradeAttachment(url, button) 
+     {
+        if (!confirm('@Html.Raw(JsonSerializer.Serialize(Resources.ConfirmDelete))')) {
+            return;
+        }
+
+        const token = document.querySelector(
+            '#tradeForm input[name="__RequestVerificationToken"]'
+        )?.value;
+
+        button.disabled = true;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'RequestVerificationToken': token
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Delete request failed.');
+            }
+
+            window.location.reload();
+        } catch (error) {
+            button.disabled = false;
+            alert('@Html.Raw(JsonSerializer.Serialize(Resources.OperationError))');
+        }
+    }
+
+
+
+
+    var $form = $('#tradeForm');
+    var submitting = false;
+
+    $form.on('submit', function (e) {
+        if (submitting) {
+            e.preventDefault();
+            return false;
+        }
+
+        var $alert = $('#formAlert');
+        $alert.addClass('d-none').text('');
+
+        var alertMessage = '@Html.Raw(JsonSerializer.Serialize(@Resources.ValidationError))';
+        if (!$form.valid()) 
+        {
+        $alert.removeClass('d-none').text(alertMessage);
+            e.preventDefault();
+            return false;
+        }
+
+        submitting = true;
+        $form.find('button[type="submit"]').prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span>');
+    });
+
+</script>
+
+

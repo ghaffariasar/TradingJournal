@@ -1,0 +1,888 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LoginTitle" xml:space="preserve">
+    <value>ورود به سیستم</value>
+  </data>
+  <data name="LoginHeader" xml:space="preserve">
+    <value>لطفاً وارد شوید</value>
+  </data>
+  <data name="LoginError" xml:space="preserve">
+    <value>نام کاربری یا رمز عبور اشتباه است</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>نام کاربری</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>رمز عبور</value>
+  </data>
+  <data name="LoginButton" xml:space="preserve">
+    <value>ورود</value>
+  </data>
+  <data name="DashboardTitle" xml:space="preserve">
+    <value>داشبورد</value>
+  </data>
+  <data name="DashboardHeader" xml:space="preserve">
+    <value>خوش آمدید به داشبورد</value>
+  </data>
+  <data name="Symbol1" xml:space="preserve">
+    <value>نماد ۱</value>
+  </data>
+  <data name="Symbol2" xml:space="preserve">
+    <value>نماد ۲</value>
+  </data>
+  <data name="Symbol3" xml:space="preserve">
+    <value>نماد ۳</value>
+  </data>
+  <data name="Symbol4" xml:space="preserve">
+    <value>نماد ۴</value>
+  </data>
+  <data name="WinRate" xml:space="preserve">
+    <value>وین ریت</value>
+  </data>
+  <data name="TradesIndexTitle" xml:space="preserve">
+    <value>مدیریت معاملات</value>
+  </data>
+  <data name="TradesHeader" xml:space="preserve">
+    <value>لیست معاملات</value>
+  </data>
+  <data name="AddNewTrade" xml:space="preserve">
+    <value>افزودن معامله جدید</value>
+  </data>
+  <data name="OrderNumber" xml:space="preserve">
+    <value>شماره سفارش</value>
+  </data>
+  <data name="TradeSymbol" xml:space="preserve">
+    <value>نام نماد معاملاتی</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>ساعت شروع معامله</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>ساعت پایان معامله</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>عملیات</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>ویرایش</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="AddTradeTitle" xml:space="preserve">
+    <value>افزودن معامله</value>
+  </data>
+  <data name="AccountBalance" xml:space="preserve">
+    <value>بالانس حساب</value>
+  </data>
+  <data name="LotSize" xml:space="preserve">
+    <value>لات سایز</value>
+  </data>
+  <data name="ProfitTarget1" xml:space="preserve">
+    <value>حد سود 1</value>
+  </data>
+  <data name="ProfitTarget2" xml:space="preserve">
+    <value>حد سود 2</value>
+  </data>
+  <data name="FinalProfitTarget" xml:space="preserve">
+    <value>حد سود نهایی</value>
+  </data>
+  <data name="StopLoss" xml:space="preserve">
+    <value>حد ضرر</value>
+  </data>
+  <data name="TradSystems" xml:space="preserve">
+    <value>سیستم‌های معاملاتی</value>
+  </data>
+  <data name="Patterns" xml:space="preserve">
+    <value>پترن‌های معاملاتی</value>
+  </data>
+  <data name="TrendConfirmation1M" xml:space="preserve">
+    <value>1M تایید</value>
+  </data>
+  <data name="TrendConfirmation5M" xml:space="preserve">
+    <value>5M تایید</value>
+  </data>
+  <data name="TrendConfirmation15M" xml:space="preserve">
+    <value>15M تایید </value>
+  </data>
+  <data name="DivergenceHD" xml:space="preserve">
+    <value>واگرایی HD</value>
+  </data>
+  <data name="DivergenceRD" xml:space="preserve">
+    <value>واگرایی RD</value>
+  </data>
+  <data name="EndOfCorrection" xml:space="preserve">
+    <value>انتهای اصلاح - EOC</value>
+  </data>
+  <data name="EndOfWay" xml:space="preserve">
+    <value>انتهای روند - EOW</value>
+  </data>
+  <data name="Attachment1" xml:space="preserve">
+    <value>فایل پیوست 1</value>
+  </data>
+  <data name="Attachment2" xml:space="preserve">
+    <value>فایل پیوست 2</value>
+  </data>
+  <data name="Attachment3" xml:space="preserve">
+    <value>فایل پیوست 3</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>ذخیره</value>
+  </data>
+  <data name="EditTradeTitle" xml:space="preserve">
+    <value>ویرایش معامله</value>
+  </data>
+  <data name="EditTradeHeader" xml:space="preserve">
+    <value>ویرایش اطلاعات معامله</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>بروزرسانی</value>
+  </data>
+  <data name="ExistingFile" xml:space="preserve">
+    <value>فایل موجود</value>
+  </data>
+  <data name="TradSystemsIndexTitle" xml:space="preserve">
+    <value>سیستم‌های معاملاتی</value>
+  </data>
+  <data name="TradSystemsHeader" xml:space="preserve">
+    <value>لیست سیستم‌های معاملاتی</value>
+  </data>
+  <data name="AddNewTradSystem" xml:space="preserve">
+    <value>افزودن سیستم معاملاتی جدید</value>
+  </data>
+  <data name="ID" xml:space="preserve">
+    <value>شناسه</value>
+  </data>
+  <data name="SystemName" xml:space="preserve">
+    <value> سیستم معاملاتی</value>
+  </data>
+  <data name="AddTradSystemTitle" xml:space="preserve">
+    <value>افزودن سیستم معاملاتی</value>
+  </data>
+  <data name="EditTradSystemTitle" xml:space="preserve">
+    <value>ویرایش سیستم معاملاتی</value>
+  </data>
+  <data name="EditTradSystem" xml:space="preserve">
+    <value>ویرایش سیستم معاملاتی</value>
+  </data>
+  <data name="PatternsIndexTitle" xml:space="preserve">
+    <value>پترن‌های معاملاتی</value>
+  </data>
+  <data name="PatternsHeader" xml:space="preserve">
+    <value>لیست پترن‌های معاملاتی</value>
+  </data>
+  <data name="AddNewPattern" xml:space="preserve">
+    <value>افزودن پترن جدید</value>
+  </data>
+  <data name="PatternName" xml:space="preserve">
+    <value>نام پترن</value>
+  </data>
+  <data name="AddPatternTitle" xml:space="preserve">
+    <value>افزودن پترن معاملاتی</value>
+  </data>
+  <data name="EditPatternTitle" xml:space="preserve">
+    <value>ویرایش پترن معاملاتی</value>
+  </data>
+  <data name="EditPattern" xml:space="preserve">
+    <value>ویرایش پترن معاملاتی</value>
+  </data>
+  <data name="IsPass" xml:space="preserve">
+    <value>پاس شده؟</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>پیوست ها</value>
+  </data>
+  <data name="TradingArchiveSystem" xml:space="preserve">
+    <value>سیستم آرشیو معاملاتی</value>
+  </data>
+  <data name="EntryPrice" xml:space="preserve">
+    <value>قیمت ورود</value>
+  </data>
+  <data name="ExitPrice" xml:space="preserve">
+    <value>قیمت خروج</value>
+  </data>
+  <data name="Profit" xml:space="preserve">
+    <value>سود</value>
+  </data>
+  <data name="IsDemoAccount" xml:space="preserve">
+    <value>اکانت دمو؟</value>
+  </data>
+  <data name="ForexTradingArchive" xml:space="preserve">
+    <value>آرشیو معاملاتی فارکس</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>خروج</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>جستجو...</value>
+  </data>
+  <data name="Symbol" xml:space="preserve">
+    <value>نماد</value>
+  </data>
+  <data name="Direction" xml:space="preserve">
+    <value>جهت معامله</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>وضعیت</value>
+  </data>
+  <data name="Timeframe" xml:space="preserve">
+    <value>تایم‌فریم</value>
+  </data>
+  <data name="Broker" xml:space="preserve">
+    <value>بروکر</value>
+  </data>
+  <data name="TradingAccount" xml:space="preserve">
+    <value>حساب معاملاتی</value>
+  </data>
+  <data name="GeneralInfo" xml:space="preserve">
+    <value>اطلاعات عمومی</value>
+  </data>
+  <data name="PricesAndRisk" xml:space="preserve">
+    <value>قیمت‌ها و ریسک</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>نتایج</value>
+  </data>
+  <data name="SystemsAndPatterns" xml:space="preserve">
+    <value>سیستم‌ها و پترن‌ها</value>
+  </data>
+  <data name="SetupChecklist" xml:space="preserve">
+    <value>چک‌لیست ست‌آپ</value>
+  </data>
+  <data name="TimesAndNotes" xml:space="preserve">
+    <value>زمان‌ها و یادداشت‌ها</value>
+  </data>
+  <data name="RealizedPnL" xml:space="preserve">
+    <value>سود/زیان تحقق‌یافته</value>
+  </data>
+  <data name="Fees" xml:space="preserve">
+    <value>کارمزد</value>
+  </data>
+  <data name="RiskAmount" xml:space="preserve">
+    <value>مبلغ ریسک</value>
+  </data>
+  <data name="RMultiple" xml:space="preserve">
+    <value>چندگانه‌ی R</value>
+  </data>
+  <data name="ExitReason" xml:space="preserve">
+    <value>دلیل خروج</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>یادداشت‌ها</value>
+  </data>
+  <data name="SelectSymbol" xml:space="preserve">
+    <value>انتخاب نماد...</value>
+  </data>
+  <data name="SelectBroker" xml:space="preserve">
+    <value>انتخاب بروکر...</value>
+  </data>
+  <data name="SelectAccount" xml:space="preserve">
+    <value>انتخاب حساب...</value>
+  </data>
+  <data name="SelectSystems" xml:space="preserve">
+    <value>انتخاب سیستم‌ها...</value>
+  </data>
+  <data name="SelectPatterns" xml:space="preserve">
+    <value>انتخاب پترن‌ها...</value>
+  </data>
+  <data name="SaveAndNew" xml:space="preserve">
+    <value>ذخیره و جدید</value>
+  </data>
+  <data name="SaveAndCopy" xml:space="preserve">
+    <value>ذخیره و کپی جدید</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>انصراف</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>جزئیات</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>بازگشت</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>آیا از حذف این مورد مطمئن هستید؟</value>
+  </data>
+  <data name="TradeDetails" xml:space="preserve">
+    <value>جزئیات معامله</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>همه وضعیت‌ها</value>
+  </data>
+  <data name="AllDirections" xml:space="preserve">
+    <value>همه جهت‌ها</value>
+  </data>
+  <data name="AllAccounts" xml:space="preserve">
+    <value>همه حساب‌ها</value>
+  </data>
+  <data name="Demo" xml:space="preserve">
+    <value>دمو</value>
+  </data>
+  <data name="Live" xml:space="preserve">
+    <value>حقیقی</value>
+  </data>
+  <data name="Dir_Long" xml:space="preserve">
+    <value>خرید</value>
+  </data>
+  <data name="Dir_Short" xml:space="preserve">
+    <value>فروش</value>
+  </data>
+  <data name="Status_Open" xml:space="preserve">
+    <value>باز</value>
+  </data>
+  <data name="Status_Closed" xml:space="preserve">
+    <value>بسته</value>
+  </data>
+  <data name="Status_Cancelled" xml:space="preserve">
+    <value>لغو شده</value>
+  </data>
+  <data name="Symbols" xml:space="preserve">
+    <value>نمادها</value>
+  </data>
+  <data name="Brokers" xml:space="preserve">
+    <value>بروکرها</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>کاربران</value>
+  </data>
+  <data name="AddNewSymbol" xml:space="preserve">
+    <value>افزودن نماد</value>
+  </data>
+  <data name="AddNewBroker" xml:space="preserve">
+    <value>افزودن بروکر</value>
+  </data>
+  <data name="AddNewAccount" xml:space="preserve">
+    <value>افزودن حساب</value>
+  </data>
+  <data name="AddNewUser" xml:space="preserve">
+    <value>افزودن کاربر</value>
+  </data>
+  <data name="EditSymbol" xml:space="preserve">
+    <value>ویرایش نماد</value>
+  </data>
+  <data name="EditBroker" xml:space="preserve">
+    <value>ویرایش بروکر</value>
+  </data>
+  <data name="EditAccount" xml:space="preserve">
+    <value>ویرایش حساب</value>
+  </data>
+  <data name="EditUser" xml:space="preserve">
+    <value>ویرایش کاربر</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>نام</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>وب‌سایت</value>
+  </data>
+  <data name="InstrumentType" xml:space="preserve">
+    <value>نوع ابزار</value>
+  </data>
+  <data name="AccountNumber" xml:space="preserve">
+    <value>شماره حساب</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>ارز</value>
+  </data>
+  <data name="IsActive" xml:space="preserve">
+    <value>فعال</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>توضیحات</value>
+  </data>
+  <data name="NewPasswordOptional" xml:space="preserve">
+    <value>رمز جدید (برای حفظ رمز فعلی خالی بگذارید)</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>نام نمایشی</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>ایمیل</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>نقش</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>از تاریخ</value>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>تا تاریخ</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>همه</value>
+  </data>
+  <data name="AccountType" xml:space="preserve">
+    <value>نوع حساب</value>
+  </data>
+  <data name="TotalTrades" xml:space="preserve">
+    <value>کل معاملات</value>
+  </data>
+  <data name="NetPnL" xml:space="preserve">
+    <value>سود/زیان خالص</value>
+  </data>
+  <data name="Wins" xml:space="preserve">
+    <value>سود</value>
+  </data>
+  <data name="Losses" xml:space="preserve">
+    <value>ضرر</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>باز</value>
+  </data>
+  <data name="MonthlyPnl" xml:space="preserve">
+    <value>سود ماهانه</value>
+  </data>
+  <data name="EquityCurve" xml:space="preserve">
+    <value>منحنی سرمایه</value>
+  </data>
+  <data name="BestSystems" xml:space="preserve">
+    <value>بهترین سیستم‌ها</value>
+  </data>
+  <data name="BestPatterns" xml:space="preserve">
+    <value>بهترین پترن‌ها</value>
+  </data>
+  <data name="WinLoss" xml:space="preserve">
+    <value>سود و ضرر</value>
+  </data>
+  <data name="TradingAccounts" xml:space="preserve">
+    <value>حساب‌های معاملاتی</value>
+  </data>
+  <data name="ProfitFactor" xml:space="preserve">
+    <value>ضریب سود</value>
+  </data>
+  <data name="AvgRMultiple" xml:space="preserve">
+    <value>میانگین R</value>
+  </data>
+  <data name="Drawdown" xml:space="preserve">
+    <value>دراودان</value>
+  </data>
+  <data name="AllSystems" xml:space="preserve">
+    <value>همه سیستم‌ها</value>
+  </data>
+  <data name="AllPatterns" xml:space="preserve">
+    <value>همه پترن‌ها</value>
+  </data>
+  <data name="ValidationError" xml:space="preserve">
+    <value>لطفاً فیلدهای مشخص‌شده را اصلاح کنید.</value>
+  </data>
+  <data name="SaveSuccess" xml:space="preserve">
+    <value>معامله با موفقیت ذخیره شد.</value>
+  </data>
+  <data name="DeleteSuccess" xml:space="preserve">
+    <value>رکورد با موفقیت حذف شد.</value>
+  </data>
+  <data name="DeleteConfirm" xml:space="preserve">
+    <value>آیا از حذف این رکورد مطمئن هستید؟</value>
+  </data>
+  <data name="OperationError" xml:space="preserve">
+    <value>در پردازش درخواست شما خطایی رخ داد.</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>وارد کردن فیلد {0} الزامی است.</value>
+  </data>
+  <data name="StringLength" xml:space="preserve">
+    <value>فیلد {0} باید حداکثر 1 کاراکتر داشته باشد.</value>
+  </data>
+  <data name="TakeProfit" xml:space="preserve">
+    <value>تارگت - حد سود</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>عنوان فایل</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>مسیر فایل</value>
+  </data>
+  <data name="NameFa" xml:space="preserve">
+    <value>نام فارسی</value>
+  </data>
+  <data name="StartTimeOfDay" xml:space="preserve">
+    <value>شروع (UTC)</value>
+  </data>
+  <data name="EndTimeOfDay" xml:space="preserve">
+    <value>پایان (UTC)</value>
+  </data>
+  <data name="SortOrder" xml:space="preserve">
+    <value>ترتیب</value>
+  </data>
+  <data name="TradingSession" xml:space="preserve">
+    <value>سشن معاملاتی</value>
+  </data>
+  <data name="TradingSessions" xml:space="preserve">
+    <value>جلسات معاملاتی</value>
+  </data>
+  <data name="AddTradingSession" xml:space="preserve">
+    <value>افزودن سشن</value>
+  </data>
+  <data name="EditTradingSession" xml:space="preserve">
+    <value>ویرایش سشن</value>
+  </data>
+  <data name="SelectSession" xml:space="preserve">
+    <value>انتخاب سشن</value>
+  </data>
+  <data name="AllSessions" xml:space="preserve">
+    <value>همه جلسات</value>
+  </data>
+  <data name="TradeAnalysisOutcome" xml:space="preserve">
+    <value>نتیجه تحلیل معامله</value>
+  </data>
+  <data name="TradeAnalysisOutcomes" xml:space="preserve">
+    <value>نتایج تحلیل</value>
+  </data>
+  <data name="AddAnalysisOutcome" xml:space="preserve">
+    <value>افزودن نتیجه تحلیل</value>
+  </data>
+  <data name="EditAnalysisOutcome" xml:space="preserve">
+    <value>ویرایش نتیجه تحلیل</value>
+  </data>
+  <data name="Emotions" xml:space="preserve">
+    <value>احساسات</value>
+  </data>
+  <data name="EmotionsAtEntry" xml:space="preserve">
+    <value>احساسات هنگام ورود</value>
+  </data>
+  <data name="EmotionsDuringTrade" xml:space="preserve">
+    <value>احساسات در حین معامله</value>
+  </data>
+  <data name="EmotionsAfterClose" xml:space="preserve">
+    <value>احساسات پس از بستن</value>
+  </data>
+  <data name="EmotionCategory" xml:space="preserve">
+    <value>دسته‌بندی</value>
+  </data>
+  <data name="AddEmotion" xml:space="preserve">
+    <value>افزودن احساس</value>
+  </data>
+  <data name="EditEmotion" xml:space="preserve">
+    <value>ویرایش احساس</value>
+  </data>
+  <data name="Emotion_AtEntry" xml:space="preserve">
+    <value>هنگام ورود</value>
+  </data>
+  <data name="Emotion_DuringTrade" xml:space="preserve">
+    <value>در حین معامله</value>
+  </data>
+  <data name="Emotion_AfterClose" xml:space="preserve">
+    <value>پس از بستن</value>
+  </data>
+  <data name="RiskRewardRatio" xml:space="preserve">
+    <value>نسبت ریسک به ریوارد</value>
+  </data>
+  <data name="TradeDuration" xml:space="preserve">
+    <value>مدت معامله</value>
+  </data>
+  <data name="Psychology" xml:space="preserve">
+    <value>روانشناسی و ارزیابی</value>
+  </data>
+  <data name="CalculatedMetrics" xml:space="preserve">
+    <value>معیارهای محاسبه‌شده</value>
+  </data>
+  <data name="AvgRiskReward" xml:space="preserve">
+    <value>میانگین ریسک به ریوارد</value>
+  </data>
+  <data name="AvgDuration" xml:space="preserve">
+    <value>میانگین مدت</value>
+  </data>
+  <data name="SessionPerformance" xml:space="preserve">
+    <value>عملکرد سشن‌ها</value>
+  </data>
+  <data name="EmotionPerformance" xml:space="preserve">
+    <value>احساسات در برابر نتایج</value>
+  </data>
+  <data name="Unassigned" xml:space="preserve">
+    <value>بدون تخصیص</value>
+  </data>
+  <data name="NoData" xml:space="preserve">
+    <value>داده‌ای موجود نیست</value>
+  </data>
+  <data name="ApplyFilters" xml:space="preserve">
+    <value>اعمال</value>
+  </data>
+  <data name="ResetFilters" xml:space="preserve">
+    <value>حذف فیلتر</value>
+  </data>
+  <data name="RangeMin" xml:space="preserve">
+    <value>{0} باید بزرگ‌تر از صفر باشد.</value>
+  </data>
+  <data name="InvalidDateRange" xml:space="preserve">
+    <value>زمان خروج باید بعد از زمان ورود باشد.</value>
+  </data>
+  <data name="ClosedTradeRequiresExit" xml:space="preserve">
+    <value>معامله بسته‌شده نیاز به زمان خروج دارد.</value>
+  </data>
+  <data name="ClosedTradeRequiresExitPrice" xml:space="preserve">
+    <value>معامله بسته‌شده نیاز به قیمت خروج دارد.</value>
+  </data>
+  <data name="LookupData" xml:space="preserve">
+    <value>داده‌های مرجع</value>
+  </data>
+  <data name="EmptyList" xml:space="preserve">
+    <value>موردی ثبت نشده است.</value>
+  </data>
+  <data name="ThemeToggle" xml:space="preserve">
+    <value>تغییر پوسته</value>
+  </data>
+  <data name="Filters" xml:space="preserve">
+    <value>فیلترها</value>
+  </data>
+  <data name="WelcomeBack" xml:space="preserve">
+    <value>خوش آمدید</value>
+  </data>
+  <data name="LoginSubtitle" xml:space="preserve">
+    <value>وارد دفتر معاملات خود شوید</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>گزارش‌ها</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>فیلتر</value>
+  </data>
+  <data name="AverageTradeResult" xml:space="preserve">
+    <value>میانگین نتیجه</value>
+  </data>
+  <data name="TradeHistory" xml:space="preserve">
+    <value>تاریخچه معاملات</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>مدت زمان</value>
+  </data>
+  <data name="NoDataFound" xml:space="preserve">
+    <value>معامله‌ای یافت نشد.</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>دسترسی‌ها</value>
+  </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>عدم دسترسی</value>
+  </data>
+  <data name="AccessDeniedMessage" xml:space="preserve">
+    <value>شما اجازه دسترسی به این بخش را ندارید.</value>
+  </data>
+  <data name="BackToDashboard" xml:space="preserve">
+    <value>بازگشت به داشبورد</value>
+  </data>
+  <data name="LoginWithAnotherAccount" xml:space="preserve">
+    <value>ورود با حساب کاربری دیگر</value>
+  </data>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>صفحه پیدا نشد</value>
+  </data>
+  <data name="PageNotFoundMessage" xml:space="preserve">
+    <value>متأسفانه صفحه‌ای که به دنبال آن بودید یافت نشد.</value>
+  </data>
+  <data name="GeneralErrorMessage" xml:space="preserve">
+    <value>مشکلی در سیستم رخ داده است. لطفاً دوباره تلاش کنید.</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>خطا</value>
+  </data>
+  <data name="Excel" xml:space="preserve">
+    <value>اکسل</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>خروجی به اکسل</value>
+  </data>
+  <data name="RegistrationEnabled" xml:space="preserve">
+    <value>امکان ثبت‌نام فعال است</value>
+  </data>
+  <data name="RegistrationEnabledDescription" xml:space="preserve">
+    <value>اجازه به کاربران برای ثبت‌نام در سایت.</value>
+  </data>
+  <data name="SystemSettings" xml:space="preserve">
+    <value>تنظیمات سیستم</value>
+  </data>
+  <data name="SystemManagement" xml:space="preserve">
+    <value>مدیریت سیستم</value>
+  </data>
+  <data name="UserRegistration" xml:space="preserve">
+    <value>ثبت‌نام کاربر</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>ذخیره تغییرات</value>
+  </data>
+  <data name="NewUserRegistration" xml:space="preserve">
+    <value>ثبت‌نام کاربر جدید</value>
+  </data>
+  <data name="PleaseEnterYourInfo" xml:space="preserve">
+    <value>لطفاً اطلاعات خود را وارد کنید</value>
+  </data>
+  <data name="RegistrationSuccess" xml:space="preserve">
+    <value>ثبت‌نام شما با موفقیت انجام شد. اکنون می‌توانید وارد شوید.</value>
+  </data>
+  <data name="UsernameRequired" xml:space="preserve">
+    <value>نام کاربری الزامی است</value>
+  </data>
+  <data name="UsernameLength" xml:space="preserve">
+    <value>نام کاربری باید بین 3 تا 64 کاراکتر باشد</value>
+  </data>
+  <data name="UsernameRegex" xml:space="preserve">
+    <value>نام کاربری فقط می‌تواند شامل حروف، اعداد و خط تیره باشد</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>رمز عبور الزامی است</value>
+  </data>
+  <data name="PasswordLength" xml:space="preserve">
+    <value>رمز عبور باید حداقل 8 کاراکتر باشد</value>
+  </data>
+  <data name="PasswordRegex" xml:space="preserve">
+    <value>رمز عبور باید شامل حروف بزرگ، حروف کوچک، عدد و کاراکتر خاص باشد</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>تکرار رمز عبور</value>
+  </data>
+  <data name="PasswordsDoNotMatch" xml:space="preserve">
+    <value>تکرار رمز عبور مطابقت ندارد</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>ایمیل نامعتبر است</value>
+  </data>
+  <data name="UsernameExists" xml:space="preserve">
+    <value>این نام کاربری قبلاً ثبت شده است</value>
+  </data>
+  <data name="NoAccountYet" xml:space="preserve">
+    <value>حساب کاربری ندارید؟</value>
+  </data>
+  <data name="RegisterNow" xml:space="preserve">
+    <value>ثبت‌نام کنید</value>
+  </data>
+  <data name="AlreadyRegistered" xml:space="preserve">
+    <value>قبلاً ثبت‌نام کرده‌اید؟</value>
+  </data>
+  <data name="LoginNow" xml:space="preserve">
+    <value>وارد شوید</value>
+  </data>
+  <data name="RegistrationPolicyInfo" xml:space="preserve">
+    <value>سیاست رمز عبور:</value>
+  </data>
+  <data name="PolicyMinLength" xml:space="preserve">
+    <value>حداقل 8 کاراکتر</value>
+  </data>
+  <data name="PolicyUpperLower" xml:space="preserve">
+    <value>حداقل یک حرف بزرگ و یک حرف کوچک</value>
+  </data>
+  <data name="PolicyNumberSpecial" xml:space="preserve">
+    <value>حداقل یک عدد و یک کاراکتر خاص</value>
+  </data>
+  <data name="Toggle" xml:space="preserve">
+    <value>تغییر وضعیت</value>
+  </data>
+  <data name="CannotDeleteSelf" xml:space="preserve">
+    <value>شما نمی‌توانید حساب کاربری خود را حذف کنید.</value>
+  </data>
+</root>

@@ -1,0 +1,141 @@
+@using TradingProject.Resources
+@using TradingProject.Helpers
+@model TradingProject.Models.Trade
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.TradeDetails;
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.TradesHeader</p>
+        <h1>@Resources.TradeDetails #@Model.Id</h1>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn tj-btn-primary">@Resources.Edit</a>
+        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">@Resources.Back</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="tj-card mb-3">
+            <div class="tj-card-header">@Resources.GeneralInfo</div>
+            <div class="tj-card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">@Resources.OrderNumber</dt><dd class="col-sm-8">@Model.OrderNumber</dd>
+                    <dt class="col-sm-4">@Resources.Symbol</dt><dd class="col-sm-8">@Model.TradeSymbol</dd>
+                    <dt class="col-sm-4">@Resources.Direction</dt><dd class="col-sm-8">@(Resources.ResourceManager.GetString("Dir_" + Model.Direction) ?? Model.Direction.ToString())</dd>
+                    <dt class="col-sm-4">@Resources.Status</dt><dd class="col-sm-8">@(Resources.ResourceManager.GetString("Status_" + Model.Status) ?? Model.Status.ToString())</dd>
+                    <dt class="col-sm-4">@Resources.Timeframe</dt><dd class="col-sm-8">@Model.Timeframe</dd>
+                    <dt class="col-sm-4">@Resources.Broker</dt><dd class="col-sm-8">@Model.Broker?.Name</dd>
+                    <dt class="col-sm-4">@Resources.TradingAccount</dt><dd class="col-sm-8">@Model.TradingAccount?.Name</dd>
+                    <dt class="col-sm-4">@Resources.TradingSession</dt><dd class="col-sm-8">@(Model.TradingSession?.LocalizedName ?? "—")</dd>
+                    <dt class="col-sm-4">@Resources.StartTime</dt><dd class="col-sm-8">@DateHelper.Format(Model.StartTime)</dd>
+                    <dt class="col-sm-4">@Resources.EndTime</dt><dd class="col-sm-8">@DateHelper.Format(Model.EndTime)</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="tj-card mb-3">
+            <div class="tj-card-header">@Resources.PricesAndRisk</div>
+            <div class="tj-card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">@Resources.LotSize</dt><dd class="col-sm-8">@Model.LotSize</dd>
+                    <dt class="col-sm-4">@Resources.EntryPrice</dt><dd class="col-sm-8">@Model.EntryPrice</dd>
+                    <dt class="col-sm-4">@Resources.ExitPrice</dt><dd class="col-sm-8">@Model.ExitPrice</dd>
+                    <dt class="col-sm-4">@Resources.StopLoss</dt><dd class="col-sm-8">@Model.StopLoss</dd>
+                    <dt class="col-sm-4">@Resources.TakeProfit</dt><dd class="col-sm-8">@Model.TakeProfit</dd>
+                    <dt class="col-sm-4">@Resources.AccountBalance</dt><dd class="col-sm-8">@Model.AccountBalance</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="tj-card mb-3">
+            <div class="tj-card-header">@Resources.Results</div>
+            <div class="tj-card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">@Resources.RealizedPnL</dt><dd class="col-sm-8">@Model.RealizedPnL</dd>
+                    <dt class="col-sm-4">@Resources.Fees</dt><dd class="col-sm-8">@Model.Fees</dd>
+                    <dt class="col-sm-4">@Resources.NetPnL</dt><dd class="col-sm-8">@Model.NetPnL</dd>
+                    <dt class="col-sm-4">@Resources.RiskRewardRatio</dt><dd class="col-sm-8">@(Model.RiskRewardRatio?.ToString("0.##") ?? "—")</dd>
+                    <dt class="col-sm-4">@Resources.TradeDuration</dt><dd class="col-sm-8">@TradeMetricsCalculator.FormatDuration(Model.DurationMinutes)</dd>
+                    <dt class="col-sm-4">@Resources.RiskAmount</dt><dd class="col-sm-8">@Model.RiskAmount</dd>
+                    <dt class="col-sm-4">@Resources.ExitReason</dt><dd class="col-sm-8">@Model.ExitReason</dd>
+                    <dt class="col-sm-4">@Resources.IsPass</dt><dd class="col-sm-8">@(Model.IsPass ? "✓" : "✗")</dd>
+                </dl>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Notes))
+        {
+            <div class="tj-card mb-3">
+                <div class="tj-card-header">@Resources.Notes</div>
+                <div class="tj-card-body">@Model.Notes</div>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-4">
+        <div class="tj-card mb-3">
+            <div class="tj-card-header">@Resources.TradSystems</div>
+            <div class="tj-card-body">
+                @if (Model.TradeTradeSystems.Any())
+                {
+                    <ul class="mb-0">
+                        @foreach (var j in Model.TradeTradeSystems)
+                        { <li>@j.TradSystem?.SystemName</li> }
+                    </ul>
+                }
+                else { <span class="text-muted">—</span> }
+            </div>
+        </div>
+
+        <div class="tj-card mb-3">
+            <div class="tj-card-header">@Resources.Patterns</div>
+            <div class="tj-card-body">
+                @if (Model.TradeTradePatterns.Any())
+                {
+                    <ul class="mb-0">
+                        @foreach (var j in Model.TradeTradePatterns)
+                        { <li>@j.Pattern?.PatternName</li> }
+                    </ul>
+                }
+                else { <span class="text-muted">—</span> }
+            </div>
+        </div>
+
+        <div class="tj-card mb-3">
+            <div class="tj-card-header">@Resources.Psychology</div>
+            <div class="tj-card-body">
+                <p class="mb-2"><strong>@Resources.TradeAnalysisOutcome:</strong> @(Model.TradeAnalysisOutcome?.LocalizedName ?? "—")</p>
+                @if (Model.TradeTradeEmotions.Any())
+                {
+                    <ul class="mb-0">
+                        @foreach (var j in Model.TradeTradeEmotions)
+                        {
+                            <li>@(Resources.ResourceManager.GetString("Emotion_" + j.Category) ?? j.Category.ToString()): @j.TradeEmotion?.LocalizedName</li>
+                        }
+                    </ul>
+                }
+                else { <span class="text-muted">—</span> }
+            </div>
+        </div>
+
+        <div class="tj-card mb-3">
+            <div class="tj-card-header">@Resources.Attachments</div>
+            <div class="tj-card-body">
+                @if (Model.Attachments.Any())
+                {
+                    <ul class="mb-0">
+                        @foreach (var att in Model.Attachments)
+                        {
+                            <li><a href="@Url.Action("DownloadAttachment", "Trades", new { id = att.Id })" target="_blank">@att.FileName</a></li>
+                        }
+                    </ul>
+                }
+                else { <span class="text-muted">—</span> }
+            </div>
+        </div>
+    </div>
+</div>

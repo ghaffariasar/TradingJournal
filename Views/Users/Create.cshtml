@@ -1,0 +1,80 @@
+@using TradingProject.Resources
+@model TradingProject.Models.ApplicationUser
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Model?.Id > 0 ? Resources.EditUser : Resources.AddNewUser;
+    var isEdit = Model?.Id > 0;
+}
+
+<h4 class="mb-3">@(isEdit ? Resources.EditUser : Resources.AddNewUser)</h4>
+
+<div class="tj-card">
+    <div class="tj-card-body">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">@string.Join("; ", ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))</div>
+        }
+        <form asp-action="@(isEdit ? "Edit" : "Create")" method="post" asp-antiforgery="true">
+            @Html.AntiForgeryToken()
+            @if (isEdit) { <input type="hidden" asp-for="Id" /> }
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">@Resources.Username</label>
+                    <input asp-for="Username" class="form-control" required />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">@(isEdit ? Resources.NewPasswordOptional : Resources.Password)</label>
+                    <input type="password" name="password" class="form-control" @(!isEdit ? "required" : "") />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">@Resources.Role</label>
+                    <select asp-for="RoleId" class="form-select">
+                        @foreach (var r in (IEnumerable<TradingProject.Models.AppRole>)ViewBag.Roles)
+                        {
+                            <option value="@r.Id">@r.LocalizedName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">@Resources.DisplayName</label>
+                    <input asp-for="DisplayName" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">@Resources.Email</label>
+                    <input asp-for="Email" type="email" class="form-control" />
+                </div>
+                
+                <div class="col-12 mt-4">
+                    <h5>@Resources.Permissions</h5>
+                    <div class="row g-2">
+                        @foreach (var p in (IEnumerable<TradingProject.Models.AppPermission>)ViewBag.Permissions)
+                        {
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="permissionIds" value="@p.Id" id="perm_@p.Id" 
+                                           @(ViewBag.UserPermissionIds != null && ((List<int>)ViewBag.UserPermissionIds).Contains(p.Id) ? "checked" : "") />
+                                    <label class="form-check-label" for="perm_@p.Id">
+                                        <small class="text-muted d-block" style="font-size: 0.7rem;">@p.Module</small>
+                                        <strong>@p.LocalizedName</strong>
+                                        <small class="d-block text-secondary" style="font-size: 0.75rem;">@p.LocalizedDescription</small>
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt-3">
+                    <div class="form-check">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                        <label asp-for="IsActive" class="form-check-label">@Resources.IsActive</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <button type="submit" class="btn tj-btn-primary">@(isEdit ? Resources.Update : Resources.Save)</button>
+                <a href="@Url.Action("Index")" class="btn btn-outline-secondary">@Resources.Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

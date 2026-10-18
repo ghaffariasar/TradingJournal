@@ -1,0 +1,98 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+out/
+artifacts/
+publish/
+
+# Application Settings
+appsettings.json
+appsettings.*.json
+
+# Keep example configuration if needed
+!appsettings.example.json
+
+# Visual Studio / IDE
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.ncrunch*
+*.dotCover
+*.coverage
+*.coveragexml
+
+# Build and test results
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.log
+*.cache
+*.tmp
+*.temp
+
+# .NET generated files
+project.lock.json
+project.fragment.lock.json
+artifacts/
+Generated\ Files/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# Local configuration / secrets
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+*.publishsettings
+*.pubxml.user
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Database files and local data
+*.mdf
+*.ldf
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+
+# Logs and diagnostics
+logs/
+Log/
+*.dmp
+
+# Front-end dependencies and generated assets
+node_modules/
+bower_components/
+coverage/
+.nyc_output/
+dist/
+.tmp/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Publish / deployment
+publish/
+*.azurePubxml
+

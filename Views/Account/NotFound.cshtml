@@ -1,0 +1,23 @@
+@using TradingProject.Resources
+@{
+    ViewData["Title"] = Resources.PageNotFound;
+    Layout = "_Layout";
+}
+
+<div class="d-flex align-items-center justify-content-center" style="min-height: 70vh;">
+    <div class="tj-card text-center p-5 shadow-lg" style="max-width: 500px; border-top: 5px solid var(--tj-warning);">
+        <div class="display-1 text-warning mb-4">
+            <span style="font-size: 5rem;">🔍</span>
+        </div>
+        <h1 class="fw-bold mb-3">404</h1>
+        <h2 class="h4 mb-3">@Resources.PageNotFound</h2>
+        <p class="text-muted mb-4 fs-5">
+            @Resources.PageNotFoundMessage
+        </p>
+        <div class="d-grid">
+            <a href="@Url.Action("Index", "Dashboard")" class="btn btn-primary btn-lg tj-btn-primary">
+                @Resources.BackToDashboard
+            </a>
+        </div>
+    </div>
+</div>

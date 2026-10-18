@@ -1,0 +1,261 @@
+@using TradingProject.Resources
+@using TradingProject.Helpers
+@model TradingProject.Models.UserTradeReportViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.Reports + " - " + Model.User.DisplayName;
+    var langIsFa = LocaleHelper.IsPersian;
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.Reports</p>
+        <h1>@Model.User.DisplayName (@Model.User.Username)</h1>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-success" onclick="exportToExcel()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
+                <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z"/>
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+            </svg>
+            @Resources.ExportToExcel
+        </button>
+        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">@Resources.Back</a>
+    </div>
+</div>
+
+<div class="tj-card mb-4">
+    <div class="tj-card-body">
+        <form method="get" class="row g-3" id="filterForm">
+            <input type="hidden" name="id" value="@Model.User.Id" />
+            <div class="col-md-2">
+                <label class="form-label">@Resources.FromDate</label>
+                @if (langIsFa)
+                {
+                    <input type="text" id="fromDate" class="form-control pdatepicker" value="@Model.FromDate?.ToString("yyyy-MM-dd")" autocomplete="off" />
+                    <input type="hidden" id="fromDate_alt" name="fromDate" value="@Model.FromDate?.ToString("yyyy-MM-dd")" />
+                }
+                else
+                {
+                    <input type="date" id="fromDate" name="fromDate" class="form-control" value="@Model.FromDate?.ToString("yyyy-MM-dd")" />
+                }
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@Resources.ToDate</label>
+                @if (langIsFa)
+                {
+                    <input type="text" id="toDate" class="form-control pdatepicker" value="@Model.ToDate?.ToString("yyyy-MM-dd")" autocomplete="off" />
+                    <input type="hidden" id="toDate_alt" name="toDate" value="@Model.ToDate?.ToString("yyyy-MM-dd")" />
+                }
+                else
+                {
+                    <input type="date" id="toDate" name="toDate" class="form-control" value="@Model.ToDate?.ToString("yyyy-MM-dd")" />
+                }
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@Resources.TradSystems</label>
+                <select name="systemId" class="form-select">
+                    <option value="">@Resources.All</option>
+                    @foreach (var s in (IEnumerable<TradingProject.Models.TradSystem>)ViewBag.TradSystems)
+                    {
+                        <option value="@s.Id" selected="@(Model.SystemId == s.Id)">@s.SystemName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@Resources.Patterns</label>
+                <select name="patternId" class="form-select">
+                    <option value="">@Resources.All</option>
+                    @foreach (var p in (IEnumerable<TradingProject.Models.Pattern>)ViewBag.Patterns)
+                    {
+                        <option value="@p.Id" selected="@(Model.PatternId == p.Id)">@p.PatternName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">@Resources.TradingSession</label>
+                <select name="sessionId" class="form-select">
+                    <option value="">@Resources.All</option>
+                    @foreach (var s in (IEnumerable<TradingProject.Models.TradingSession>)ViewBag.Sessions)
+                    {
+                        <option value="@s.Id" selected="@(Model.SessionId == s.Id)">@LocaleHelper.Pick(s.Name, s.NameFa)</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn tj-btn-primary w-100">@Resources.Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-2">
+        <div class="tj-card text-center py-3">
+            <div class="text-muted small">@Resources.TotalTrades</div>
+            <div id="metricTotalTrades" class="h4 mb-0">—</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="tj-card text-center py-3">
+            <div class="text-muted small">@Resources.WinRate</div>
+            <div id="metricWinRate" class="h4 mb-0">—</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="tj-card text-center py-3">
+            <div class="text-muted small">@Resources.NetPnL</div>
+            <div id="metricNetPnL" class="h4 mb-0">—</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="tj-card text-center py-3">
+            <div class="text-muted small">@Resources.AverageTradeResult</div>
+            <div id="metricAvgPnL" class="h4 mb-0">—</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="tj-card text-center py-3">
+            <div class="text-muted small">@Resources.ProfitFactor</div>
+            <div id="metricProfitFactor" class="h4 mb-0">—</div>
+        </div>
+    </div>
+</div>
+
+<div class="tj-card">
+    <div class="tj-card-header">
+        <h5>@Resources.TradeHistory</h5>
+    </div>
+    <div class="tj-card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle" id="reportTable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>@Resources.StartTime</th>
+                        <th>@Resources.Symbol</th>
+                        <th>@Resources.Direction</th>
+                        <th>@Resources.Status</th>
+                        <th>@Resources.NetPnL</th>
+                        <th>@Resources.RiskRewardRatio</th>
+                        <th>@Resources.TradeDuration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/xls/xlsx.full.min.js")"></script>
+
+    <script>
+        $(function () {
+            var langIsFa = @(langIsFa.ToString().ToLower());
+            var table;
+
+            function updateMetrics(metrics) {
+                if (!metrics) return;
+                $('#metricTotalTrades').text(metrics.TotalTrades);
+                $('#metricWinRate').text(metrics.WinRate.toFixed(1) + '%')
+                    .removeClass('text-success text-danger')
+                    .addClass(metrics.WinRate >= 50 ? 'text-success' : 'text-danger');
+                $('#metricNetPnL').text(metrics.NetProfitLoss.toLocaleString(undefined, { minimumFractionDigits: 2 }))
+                    .removeClass('text-success text-danger')
+                    .addClass(metrics.NetProfitLoss >= 0 ? 'text-success' : 'text-danger');
+                $('#metricAvgPnL').text(metrics.AverageTradeResult.toLocaleString(undefined, { minimumFractionDigits: 2 }))
+                    .removeClass('text-success text-danger')
+                    .addClass(metrics.AverageTradeResult >= 0 ? 'text-success' : 'text-danger');
+                $('#metricProfitFactor').text(metrics.ProfitFactor.toFixed(2));
+            }
+
+            if (langIsFa) {
+                $(".pdatepicker").each(function() {
+                    var $el = $(this);
+                    var initialVal = $el.val();
+                    $el.persianDatepicker({
+                        format: 'YYYY/MM/DD',
+                        autoClose: true,
+                        initialValue: !!initialVal,
+                        initialValueType: 'gregorian',
+                        altField: '#' + $el.attr('id') + '_alt',
+                        //altFormat: 'YYYY-MM-DD',
+                        onSelect: function(unix) {
+                            $el.val(new persianDate(unix).format('YYYY/MM/DD'));
+                            var iso = new persianDate(unix).toCalendar('gregorian').toLocale('en').format('YYYY-MM-DD');
+                            $('#' + $el.attr('id') + '_alt').val(iso).trigger('change');
+                        }
+                    });
+                });
+            }
+
+            table = $('#reportTable').DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ajax: {
+                    url: '@Url.Action("GetUserReportData", "Users")',
+                    data: function(d) {
+                        return {
+                            id: @Model.User.Id,
+                            fromDate: langIsFa ? $('#fromDate_alt').val() : $('#fromDate').val(),
+                            toDate: langIsFa ? $('#toDate_alt').val() : $('#toDate').val(),
+                            systemId: $('select[name="systemId"]').val(),
+                            patternId: $('select[name="patternId"]').val(),
+                            sessionId: $('select[name="sessionId"]').val(),
+                            start: d.start,
+                            length: d.length
+                        };
+                    },
+                    dataSrc: function(json) {
+                        updateMetrics(json.metrics);
+                        return json.data;
+                    }
+                },
+                columns: [
+                    { 
+                        data: 'StartTime', 
+                        render: function(d) {
+                            if (!d) return '';
+                            var dt = new Date(d);
+                            if (langIsFa) {
+                                return new persianDate(dt).format('YYYY/MM/DD HH:mm');
+                            }
+                            return dt.toLocaleString();
+                        }
+                    },
+                    { data: 'TradeSymbol' },
+                    { data: 'Direction' },
+                    { data: 'Status' },
+                    { 
+                        data: 'NetProfitLoss',
+                        render: function(d) {
+                            if (d === null) return '—';
+                            var cls = d >= 0 ? 'text-success' : 'text-danger';
+                            return '<span class="' + cls + '">' + d.toLocaleString(undefined, { minimumFractionDigits: 2 }) + '</span>';
+                        }
+                    },
+                    { 
+                        data: 'RiskRewardRatio',
+                        render: function(d) { return d ? d.toFixed(2) : '—'; }
+                    },
+                    { data: 'Duration' }
+                ],
+                order: [[0, 'desc']],
+                language: langIsFa ? { url: '@Url.Content("~/dataTable/fa.json")' } : {}
+            });
+
+            $('#filterForm').on('submit', function(e) {
+                e.preventDefault();
+                table.ajax.reload();
+            });
+        });
+
+        function exportToExcel() {
+            var table = document.getElementById("reportTable");
+            var wb = XLSX.utils.table_to_book(table, { sheet: "Trade History" });
+            XLSX.writeFile(wb, "TradeReport_@Model.User.Username" + ".xlsx");
+        }
+    </script>
+}

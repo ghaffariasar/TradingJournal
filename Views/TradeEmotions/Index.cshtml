@@ -1,0 +1,59 @@
+@using TradingProject.Resources
+@using TradingProject.Models.Enums
+@model IEnumerable<TradingProject.Models.TradeEmotion>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Resources.Emotions;
+}
+
+<div class="tj-page-head">
+    <div>
+        <p class="tj-kicker">@Resources.LookupData</p>
+        <h1>@Resources.Emotions</h1>
+    </div>
+    <a href="@Url.Action("Create")" class="btn tj-btn-primary">@Resources.AddEmotion</a>
+</div>
+
+<partial name="_Alerts" />
+
+<div class="tj-card">
+    <div class="tj-card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>@Resources.EmotionCategory</th>
+                        <th>@Resources.Name</th>
+                        <th>@Resources.NameFa</th>
+                        <th>@Resources.IsActive</th>
+                        <th>@Resources.Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr><td colspan="5" class="tj-empty">@Resources.EmptyList</td></tr>
+                    }
+                    @foreach (var e in Model)
+                    {
+                        <tr>
+                            <td>@(Resources.ResourceManager.GetString("Emotion_" + e.Category) ?? e.Category.ToString())</td>
+                            <td class="fw-semibold">@e.Name</td>
+                            <td>@e.NameFa</td>
+                            <td>
+                                <span class="tj-pill @(e.IsActive ? "is-on" : "is-off")">@(e.IsActive ? "✓" : "✗")</span>
+                            </td>
+                            <td class="tj-row-actions">
+                                <a href="@Url.Action("Edit", new { id = e.Id })" class="btn btn-sm btn-outline-primary">@Resources.Edit</a>
+                                <form asp-action="Delete" asp-route-id="@e.Id" method="post" class="d-inline" onsubmit="return confirm('@Resources.ConfirmDelete')">
+                                    @Html.AntiForgeryToken()
+                                    <button class="btn btn-sm btn-outline-danger">@Resources.Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
