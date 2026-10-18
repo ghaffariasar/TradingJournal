@@ -79,7 +79,7 @@ FxArchive به معامله‌گران اجازه می‌دهد تا با معا
 - **کنترل ثبت‌نام**: مدیران می‌توانند امکان ثبت‌نام عمومی را از بخش تنظیمات سیستم فعال یا غیرفعال کنند.
 
 - **سیستم مجوزها**: کنترل دقیق بر روی دسترسی کاربران برای مشاهده، ایجاد یا ویرایش معاملات و داده‌های مرجع.
-=======
+
 - **سیستم نقش‌ها و مجوزها**: 
     - دارای نقش‌های پیش‌فرض **مدیر سیستم**، **معامله‌گر** و **اپراتور**.
     - کنترل دقیق بر روی دسترسی‌ها (Granular Permissions) از جمله مدیریت حساب‌های شخصی جدا از اطلاعات پایه سیستم.
@@ -88,7 +88,7 @@ FxArchive به معامله‌گران اجازه می‌دهد تا با معا
 
 ---
 
-=======
+
 ## 📱 بهینه‌سازی موبایل
 تمامی جداول و صفحات مدیریتی (نمادها، بروکرها، سیستم‌ها، کاربران و ...) برای نمایش در موبایل و تبلت بهینه شده‌اند و از اسکرول افقی هوشمند در جداول بزرگ پشتیبانی می‌کنند.
 
@@ -201,11 +201,6 @@ FxArchive empowers traders to treat trading like a business. By combining quanti
 
 ## 📱 Mobile Optimization
 All data tables and management pages (Symbols, Brokers, Systems, Users, etc.) are fully optimized for mobile devices with responsive layouts and horizontal scrolling support.
-
----
-
-## 📸 Screenshots
-*(Coming Soon - Add your screenshots here to showcase the beautiful UI)*
 
 ---
 
